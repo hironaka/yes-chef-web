@@ -124,17 +124,17 @@ export default function App() {
     }
   }, [dataChannel]);
 
-  // Listen for messages from the Yes Chef browser extension
+  // Get the recipe from the browser extension
   useEffect(() => {
-    const handleExtensionMessage = (event) => {
-      if (event.data && event.data.type === 'RECIPE_DATA') {
-        const jsonData = event.data.data;
-        console.log('Received JSON from extension:', jsonData);
-        setRecipe(jsonData);
-      }
-    };
-    window.addEventListener('message', handleExtensionMessage);
-    return () => window.removeEventListener('message', handleExtensionMessage);
+    const extensionId = 'lmakaflodkdoemdbcahofdoiihchjbim'; // Replace with your extension ID
+    if (chrome && chrome.runtime) {
+      chrome.runtime.sendMessage(extensionId, { action: 'GET_RECIPE' }, response => {
+        console.log('Response from extension:', response);
+        if (response && response.recipe) {
+          setRecipe(response.recipe);
+        }
+      });
+    }
   }, []);
 
   // Send the recipe to the model
