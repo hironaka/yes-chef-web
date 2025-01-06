@@ -8,6 +8,7 @@ export default function App() {
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [events, setEvents] = useState([]);
   const [dataChannel, setDataChannel] = useState(null);
+  const [recipe, setRecipe] = useState(null);
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
 
@@ -122,6 +123,26 @@ export default function App() {
       });
     }
   }, [dataChannel]);
+
+  // Listen for messages from the Yes Chef browser extension
+  useEffect(() => {
+    const handleExtensionMessage = (event) => {
+      if (event.data && event.data.type === 'RECIPE_DATA') {
+        const jsonData = event.data.data;
+        console.log('Received JSON from extension:', jsonData);
+        setRecipe(jsonData);
+      }
+    };
+    window.addEventListener('message', handleExtensionMessage);
+    return () => window.removeEventListener('message', handleExtensionMessage);
+  }, []);
+
+  // Send the recipe to the model
+  useEffect(() => {
+    if (isSessionActive && dataChannel && recipe) {
+      sendTextMessage(JSON.stringify(recipe));
+    }
+  }, [isSessionActive, dataChannel, recipe]);
 
   return (
     <>
