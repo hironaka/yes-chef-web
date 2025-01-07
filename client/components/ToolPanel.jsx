@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 const sessionUpdate = {
   type: "session.update",
   session: {
-    "instructions": "You are a helpful assistant.",
+    "instructions": "You are a helpful sous chef working as an assistant to a chef. Start by saying yes chef and wait for instructions. Give small step by step instructions to the chef instructions and only move on when the chef is ready.",
     "temperature": 0.1,
   },
 };
