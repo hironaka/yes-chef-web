@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
 
-const functionDescription = `
-Call this function when a user asks for a color palette.
-`;
-
 const sessionUpdate = {
   type: "session.update",
   session: {
@@ -12,96 +8,77 @@ const sessionUpdate = {
   },
 };
 
-function FunctionCallOutput({ functionCallOutput }) {
-  const { theme, colors } = JSON.parse(functionCallOutput.arguments);
-
-  const colorBoxes = colors.map((color) => (
-    <div
-      key={color}
-      className="w-full h-16 rounded-md flex items-center justify-center border border-gray-200"
-      style={{ backgroundColor: color }}
-    >
-      <p className="text-sm font-bold text-black bg-slate-100 rounded-md p-2 border border-black">
-        {color}
-      </p>
-    </div>
-  ));
-
-  return (
-    <div className="flex flex-col gap-2">
-      <p>Theme: {theme}</p>
-      {colorBoxes}
-      <pre className="text-xs bg-gray-100 rounded-md p-2 overflow-x-auto">
-        {JSON.stringify(functionCallOutput, null, 2)}
-      </pre>
-    </div>
-  );
-}
-
 export default function ToolPanel({
   recipe,
   isSessionActive,
   sendClientEvent,
   events,
 }) {
-  const [functionAdded, setFunctionAdded] = useState(false);
-  const [functionCallOutput, setFunctionCallOutput] = useState(null);
+  const [systemInstructionAdded, setSystemInstructionAdded] = useState(false);
 
   useEffect(() => {
     if (!events || events.length === 0) return;
 
     const firstEvent = events[events.length - 1];
-    if (!functionAdded && firstEvent.type === "session.created") {
+    if (!systemInstructionAdded && firstEvent.type === "session.created") {
       sendClientEvent(sessionUpdate);
-      setFunctionAdded(true);
-    }
-
-    const mostRecentEvent = events[0];
-    if (
-      mostRecentEvent.type === "response.done" &&
-      mostRecentEvent.response.output
-    ) {
-      mostRecentEvent.response.output.forEach((output) => {
-        if (
-          output.type === "function_call" &&
-          output.name === "display_color_palette"
-        ) {
-          setFunctionCallOutput(output);
-          setTimeout(() => {
-            sendClientEvent({
-              type: "response.create",
-              response: {
-                instructions: `
-                ask for feedback about the color palette - don't repeat 
-                the colors, just ask if they like the colors.
-              `,
-              },
-            });
-          }, 500);
-        }
-      });
+      setSystemInstructionAdded(true);
     }
   }, [events]);
 
   useEffect(() => {
     if (!isSessionActive) {
-      setFunctionAdded(false);
-      setFunctionCallOutput(null);
+      setSystemInstructionAdded(false);
     }
   }, [isSessionActive]);
 
   return (
     <section className="h-full w-full flex flex-col gap-4">
-      <div className="h-full bg-gray-50 rounded-md p-4">
-        <h2 className="text-lg font-bold">Color Palette Tool</h2>
-        {isSessionActive ? (
-          functionCallOutput ? (
-            <FunctionCallOutput functionCallOutput={functionCallOutput} />
-          ) : (
-            <p>Ask for advice on a color palette...</p>
-          )
+      <div className="h-full bg-gray-50 rounded-md p-4 overflow-y-auto">
+        {recipe ? (
+          <div className="space-y-4">
+            <h3 className="text-xl font-semibold">{recipe.name}</h3>
+
+            <div>
+              <h4 className="font-medium mb-2">Ingredients</h4>
+              <ul className="list-disc list-inside">
+                {recipe.recipeIngredient?.map((ingredient, index) => (
+                  <li key={index} className="mb-1">
+                    {typeof ingredient === 'string' ? ingredient : ingredient.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <ol className="list-decimal list-inside">
+                {recipe.recipeInstructions?.map((instruction, index) => {
+                  if (instruction["@type"] === "HowToSection") {
+                    return (
+                      <div key={index} className="mb-4">
+                        <h5 className="font-medium mb-2">{instruction.name}</h5>
+                        <ol className="list-decimal list-inside">
+                          {instruction.itemListElement.map((step, stepIndex) => (
+                            <li key={stepIndex} className="mb-2">
+                              {step.text}
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <li key={index} className="mb-2">
+                        {instruction.text || instruction}
+                      </li>
+                    );
+                  }
+                })}
+              </ol>
+            </div>
+          </div>
         ) : (
-          <p>Start the session to use this tool...</p>
+          <p>No recipe loaded</p>
         )}
       </div>
     </section>

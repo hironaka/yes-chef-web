@@ -132,6 +132,7 @@ export default function App() {
         console.log('Response from extension:', response);
         if (response && response.recipe) {
           setRecipe(response.recipe);
+          console.log('Recipe set:', response.recipe);
         }
       });
     }
