@@ -39,6 +39,7 @@ function FunctionCallOutput({ functionCallOutput }) {
 }
 
 export default function ToolPanel({
+  recipe,
   isSessionActive,
   sendClientEvent,
   events,
