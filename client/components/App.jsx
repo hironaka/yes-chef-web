@@ -133,8 +133,12 @@ export default function App() {
         if (response && response.recipe) {
           setRecipe(response.recipe);
           console.log('Recipe set:', response.recipe);
+        } else {
+          console.error('No recipe received from extension');
         }
       });
+    } else {
+      console.error('Chrome runtime not available');
     }
   }, []);
 
