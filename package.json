@@ -7,7 +7,6 @@
     "build:client": "vite build --outDir dist/client --ssrManifest",
     "build:server": "vite build --outDir dist/server --ssr /index.js",
     "devinstall": "zx ../../devinstall.mjs -- node server.js --dev",
-    "heroku-postbuild": "npm run build",
     "lint": "eslint . --ext .js,.jsx --fix"
   },
   "dependencies": {
