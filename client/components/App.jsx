@@ -142,9 +142,18 @@ export default function App() {
     }
   }, []);
 
+  const sessionUpdate = {
+    type: "session.update",
+    session: {
+      "instructions": "You are a helpful sous chef working as an assistant to a chef. Start by saying 'yes chef' and wait for a question. Make answers as consice as possible without missing any information and only give instructions when asked. Be as incremental and step by step as possible.",
+      "temperature": 0.6,
+    },
+  };
+
   // Send the recipe to the model
   useEffect(() => {
     if (isSessionActive && dataChannel && recipe) {
+      sendClientEvent(sessionUpdate);
       sendTextMessage(JSON.stringify(recipe));
     }
   }, [isSessionActive, dataChannel, recipe]);
