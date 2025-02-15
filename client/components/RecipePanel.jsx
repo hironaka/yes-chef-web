@@ -8,7 +8,7 @@ const sessionUpdate = {
   },
 };
 
-export default function ToolPanel({
+export default function RecipePanel({
   recipe,
   isSessionActive,
   sendClientEvent,
