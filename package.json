@@ -1,14 +1,13 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "node server.js",
+    "dev": "node server.js --dev",
     "start": "node server.js",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/client --ssrManifest",
-    "build:server": "vite build --outDir dist/server --ssr server.js",
+    "build:server": "vite build --outDir dist/server --ssr /index.js",
     "devinstall": "zx ../../devinstall.mjs -- node server.js --dev",
-    "lint": "eslint . --ext .js,.jsx --fix",
-    "preview": "vite preview"
+    "lint": "eslint . --ext .js,.jsx --fix"
   },
   "dependencies": {
     "dotenv": "^16.4.7",
