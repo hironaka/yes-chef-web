@@ -1,46 +1,11 @@
 import { useEffect, useState } from "react";
 
-
-const systemInstruction = `
-You are a helpful sous-chef working as an assistant to a chef.
-
-Give sucinct, incremental, step by step instructions. Only move on to the next step when the chef is ready.
-
-When an ingredient lists alternative units of measure and quantities (e.g., ounces or grams), say "or" to connect each option.
-`;
-
-const sessionUpdate = {
-  type: "session.update",
-  session: {
-    "instructions": systemInstruction,
-    "temperature": 0.1,
-  },
-};
-
 export default function RecipePanel({
   recipe,
   isSessionActive,
   sendClientEvent,
   events,
 }) {
-  const [systemInstructionAdded, setSystemInstructionAdded] = useState(false);
-
-  useEffect(() => {
-    if (!events || events.length === 0) return;
-
-    const firstEvent = events[events.length - 1];
-    if (!systemInstructionAdded && firstEvent.type === "session.created") {
-      sendClientEvent(sessionUpdate);
-      setSystemInstructionAdded(true);
-    }
-  }, [events]);
-
-  useEffect(() => {
-    if (!isSessionActive) {
-      setSystemInstructionAdded(false);
-    }
-  }, [isSessionActive]);
-
   return (
     <section className="h-full w-full flex flex-col gap-4">
       <div className="h-full bg-gray-50 rounded-md p-4 overflow-y-auto">

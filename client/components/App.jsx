@@ -149,10 +149,18 @@ export default function App() {
     }
   }, []);
 
+  const systemInstruction = `
+  You are a helpful sous-chef working as an assistant to a chef.
+
+  Start by saying 'yes chef' and wait for a question. Make answers as consice as possible without missing any information. Only give instructions when asked. Be as incremental and step by step as possible.
+
+  When an ingredient lists alternative units of measure and quantities (e.g., ounces or grams), say "or" to connect each option.
+  `;
+  
   const sessionUpdate = {
     type: "session.update",
     session: {
-      "instructions": "You are a helpful sous chef working as an assistant to a chef. Start by saying 'yes chef' and wait for a question. Make answers as consice as possible without missing any information and only give instructions when asked. Be as incremental and step by step as possible.",
+      "instructions": systemInstruction,
       "temperature": 0.6,
     },
   };
