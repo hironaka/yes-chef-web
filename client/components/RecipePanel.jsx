@@ -1,9 +1,18 @@
 import { useEffect, useState } from "react";
 
+
+const systemInstruction = `
+You are a helpful sous-chef working as an assistant to a chef.
+
+Give sucinct, incremental, step by step instructions. Only move on to the next step when the chef is ready.
+
+When an ingredient lists alternative units of measure and quantities (e.g., ounces or grams), say "or" to connect each option.
+`;
+
 const sessionUpdate = {
   type: "session.update",
   session: {
-    "instructions": "You are a helpful sous-chef working as an assistant to a chef. Give small step by step instructions. Only move on when the chef is ready.",
+    "instructions": systemInstruction,
     "temperature": 0.1,
   },
 };
