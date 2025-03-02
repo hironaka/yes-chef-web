@@ -21,8 +21,9 @@ export default function RootLayout({
           enableSystem={true}
           defaultTheme="light"
         >
-          <LayoutWrapper />
-          {children}
+          <LayoutWrapper>
+            {children}
+          </LayoutWrapper>
           <ScrollToTop />
         </ThemeProvider>
       </body>
