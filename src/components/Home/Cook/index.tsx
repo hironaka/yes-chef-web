@@ -5,7 +5,7 @@ import Image from 'next/image';
 const Cook = () => {
 
     return (
-        <section className='relative' id="cook-section">
+        <section className='relative' id="about-section">
             <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md">
                 <div className='absolute right-0 bottom-[-18%] hidden lg:block'>
                     <Image src='/images/Cook/burger.png' alt="burger-image" width={463} height={622} />
