@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import EventLog from "./EventLog";
 import SessionControls from "./SessionControls";
 import RecipePanel from "./RecipePanel";
@@ -85,7 +85,7 @@ export default function App() {
   }
 
   // Send a message to the model
-  function sendClientEvent(message) {
+  const sendClientEvent = useCallback((message) => {
     if (dataChannel) {
       message.event_id = message.event_id || crypto.randomUUID();
       dataChannel.send(JSON.stringify(message));
@@ -96,10 +96,10 @@ export default function App() {
         message,
       );
     }
-  }
+  }, [dataChannel]);
 
   // Send a text message to the model
-  function sendTextMessage(message) {
+  const sendTextMessage = useCallback((message) => {
     const event = {
       type: "conversation.item.create",
       item: {
@@ -116,7 +116,7 @@ export default function App() {
 
     sendClientEvent(event);
     sendClientEvent({ type: "response.create" });
-  }
+  }, [sendClientEvent]);
 
   // Attach event listeners to the data channel when a new one is created
   useEffect(() => {
@@ -160,21 +160,23 @@ export default function App() {
   When an ingredient lists alternative units of measure and quantities (e.g., ounces or grams), say "or" to connect each option.
   `;
   
-  const sessionUpdate = {
-    type: "session.update",
-    session: {
-      "instructions": systemInstruction,
-      "temperature": 0.6,
-    },
-  };
+  const sessionUpdate = useCallback(() => {
+    return {
+      type: "session.update",
+      session: {
+        "instructions": systemInstruction,
+        "temperature": 0.6,
+      },
+    };
+  }, [systemInstruction]);
 
   // Send the recipe to the model
   useEffect(() => {
     if (isSessionActive && dataChannel && recipe) {
-      sendClientEvent(sessionUpdate);
+      sendClientEvent(sessionUpdate());
       sendTextMessage(JSON.stringify(recipe));
     }
-  }, [isSessionActive, dataChannel, recipe]);
+  }, [isSessionActive, dataChannel, recipe, sendClientEvent, sendTextMessage, sessionUpdate]);
 
   return (
     <>

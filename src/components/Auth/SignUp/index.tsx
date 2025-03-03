@@ -91,13 +91,13 @@ const SignUp = () => {
 
       <p className="text-body-secondary mb-4 text-white text-base">
         By creating an account you are agree with our{" "}
-        <a href="/#" className="text-primary hover:underline">
+        <Link href="/#" className="text-primary hover:underline">
           Privacy
-        </a>{" "}
+        </Link>{" "}
         and{" "}
-        <a href="/#" className="text-primary hover:underline">
+        <Link href="/#" className="text-primary hover:underline">
           Policy
-        </a>
+        </Link>
       </p>
 
       <p className="text-body-secondary text-white text-base">
