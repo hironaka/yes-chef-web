@@ -35,3 +35,6 @@ next-env.d.ts
 # environment variables
 .env
 .env.production
+
+# documentation
+docs/

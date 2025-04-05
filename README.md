@@ -1,38 +1,62 @@
-# OpenAI Realtime Console
+# Yes Chef! - AI Recipe Assistant Web Interface
 
-This is an example application showing how to use the [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime) with [WebRTC](https://platform.openai.com/docs/guides/realtime-webrtc).
+This project is a web interface for an AI-powered recipe assistant called "Yes Chef!". It allows users to interact with an AI sous-chef in real-time while viewing a recipe.
 
-## Installation and usage
+**Core Technologies:**
 
-Before you begin, you'll need an OpenAI API key - [create one in the dashboard here](https://platform.openai.com/settings/api-keys). Create a `.env` file from the example file and set your API key in there:
+*   [Next.js](https://nextjs.org/) (App Router)
+*   [React](https://reactjs.org/)
+*   [TypeScript](https://www.typescriptlang.org/)
+*   [Tailwind CSS](https://tailwindcss.com/)
+*   [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime)
+*   [WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API)
 
-```bash
-cp .env.example .env
-```
+**Key Feature:** Real-time voice and text interaction with an AI assistant based on the recipe currently being viewed.
 
-Running this application locally requires [Node.js](https://nodejs.org/) to be installed. Install dependencies for the application with:
+**🚨 Important Dependency:** This web application requires a companion **Chrome Browser Extension** (ID: `lmakaflodkdoemdbcahofdoiihchjbim`) to be installed and active. The extension is responsible for providing the recipe data to this web interface. *Without the extension, the core recipe assistant feature will not function.* (Link to extension repository/store page should be added here if available).
 
-```bash
-npm install
-```
+## Getting Started
 
-Start the application server with:
+### Prerequisites
 
-```bash
-npm run dev
-```
+*   [Node.js](https://nodejs.org/) (Check `.nvmrc` or `package.json` engines field for specific version requirements, if any)
+*   [npm](https://www.npmjs.com/) (usually comes with Node.js)
+*   The companion Chrome Extension (ID: `lmakaflodkdoemdbcahofdoiihchjbim`) installed in your browser.
 
-This should start the console application on [http://localhost:3000](http://localhost:3000).
+### Installation
 
-This application is a minimal template that uses [express](https://expressjs.com/) to serve the React frontend contained in the [`/client`](./client) folder. The server is configured to use [vite](https://vitejs.dev/) to build the React frontend.
+1.  **Clone the repository:**
+    ```bash
+    git clone <repository-url> # Replace with the actual URL
+    cd yes-chef-web
+    ```
 
-This application shows how to send and receive Realtime API events over the WebRTC data channel and configure client-side function calling. You can also view the JSON payloads for client and server events using the logging panel in the UI.
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-For a more comprehensive example, see the [OpenAI Realtime Agents](https://github.com/openai/openai-realtime-agents) demo built with Next.js, using an agentic architecture inspired by [OpenAI Swarm](https://github.com/openai/swarm).
+3.  **Set up environment variables:**
+    *   You'll need an OpenAI API key. [Create one here if you don't have one](https://platform.openai.com/settings/api-keys).
+    *   Copy the example environment file:
+        ```bash
+        cp .env.example .env.local
+        ```
+    *   Open `.env.local` and add your OpenAI API key:
+        ```
+        OPENAI_API_KEY=your_openai_api_key_here
+        ```
 
-## Previous WebSockets version
+### Running the Development Server
 
-The previous version of this application that used WebSockets on the client (not recommended in browsers) [can be found here](https://github.com/openai/openai-realtime-console/tree/websockets).
+1.  **Start the application:**
+    ```bash
+    npm run dev
+    ```
+
+2.  Open your browser and navigate to [http://localhost:3000](http://localhost:3000).
+
+3.  Navigate to the `/recipe` page to use the AI assistant feature (ensure the Chrome Extension is active and you have a recipe loaded via the extension).
 
 ## License
 
