@@ -1,6 +1,6 @@
 "use client"
 import Image from 'next/image';
-import { galleryImages } from '@/app/api/data';
+import { featuredRecipes, FeaturedRecipe } from '@/app/api/data';
 import Masonry from 'react-masonry-css';
 import Link from 'next/link';
 
@@ -9,9 +9,9 @@ const Gallery = () => {
         <section id="cook-section">
             <div className='container mx-auto lg:max-w-screen-xl md:max-w-screen-md' id='gallery-section'>
                 <div className="text-center">
-                    <p className='text-primary text-lg font-normal mb-3 tracking-widest uppercase'>What to Cook Now</p>
+                    <p className='text-primary text-lg font-normal mb-3 tracking-widest uppercase'>Featured Recipes</p> {/* Updated heading */}
                     <h2 className="text-3xl lg:text-5xl font-semibold text-black dark:text-white">
-                        Explore top-rated recipes ready for you to try.
+                        Explore hand-selected recipes from around the web.
                     </h2>
                 </div>
                 <div className="my-16 px-6">
@@ -20,26 +20,30 @@ const Gallery = () => {
                         className="flex gap-6"
                         columnClassName="masonry-column"
                     >
-                        {/* Map through images */}
-                        {galleryImages.map((item, index) => (
-                            <div key={index} className="overflow-hidden rounded-3xl mb-6 relative group">
+                        {featuredRecipes.map((item: FeaturedRecipe) => (
+                            <div key={item.id} className="overflow-hidden rounded-3xl mb-6 relative group">
                                 <Image
-                                    src={item.src}
-                                    alt={item.name}
+                                    src={item.thumbnailUrl}
+                                    alt={item.recipeTitle}
                                     width={600}
                                     height={500}
                                     className="object-cover w-full h-full"
                                 />
-                                <div className="w-full h-full absolute bg-black/40 top-full group-hover:top-0 duration-500 p-12 flex flex-col items-start gap-8 justify-end">
-                                    <p className='text-white text-2xl'>
-                                        <span className='font-semibold'>Name:</span> {item.name}
-                                    </p>
+                                <div className="w-full h-full absolute bg-black/40 top-full group-hover:top-0 duration-500 p-8 flex flex-col items-start gap-4 justify-end"> {/* Adjusted padding and gap */}
+                                    <h3 className='text-white text-xl font-semibold'>
+                                        {item.recipeTitle}
+                                    </h3>
                                     <div className="flex items-center justify-between w-full">
-                                        <p className='text-white text-2xl'>
-                                            <span className='font-semibold'>Price:</span> ${item.price}
+                                        <p className='text-white text-base'>
+                                            Source: <span className='font-medium'>{item.websiteName}</span>
                                         </p>
-                                        <Link href="#" className='text-white rounded-full bg-primary border border-primary py-2 px-6 hover:bg-primary/40 hover:backdrop-blur-sm'>
-                                            Learn More
+                                        <Link
+                                            href={item.recipeUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer" // Security for target="_blank"
+                                            className='text-white rounded-full bg-primary border border-primary py-2 px-5 text-sm hover:bg-primary/40 hover:backdrop-blur-sm' // Adjusted padding/text size
+                                        >
+                                            View Recipe
                                         </Link>
                                     </div>
                                 </div>

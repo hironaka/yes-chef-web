@@ -63,10 +63,42 @@ export const ExpertData: {
     },
   ]
 
-// data.tsx
-export const galleryImages = [
-  { src: '/images/Gallery/foodone.jpg', name: 'Caesar Salad(187 Kcal)', price: 35 },
-  { src: '/images/Gallery/foodtwo.jpg', name: 'Christmas salad(118 Kcal)', price: 17 },
-  { src: '/images/Gallery/foodthree.jpg', name: 'Sauteed mushrooms with pumpkin and sweet pepper(238 kcal)', price: 45 },
-  { src: '/images/Gallery/foodfour.jpg', name: 'BBQ Chicken Feast Pizza(272 kcal)', price: 27 },
+// Featured Recipes Data
+export interface FeaturedRecipe {
+  id: number;
+  websiteName: string;
+  thumbnailUrl: string;
+  recipeTitle: string;
+  recipeUrl: string;
+}
+
+export const featuredRecipes: FeaturedRecipe[] = [
+  {
+    id: 1,
+    websiteName: "Food Network",
+    thumbnailUrl: "/images/Gallery/foodone.jpg", // Placeholder - using old image
+    recipeTitle: "Classic Caesar Salad",
+    recipeUrl: "https://www.foodnetwork.com/recipes/food-network-kitchen/classic-caesar-salad-recipe-1973506",
+  },
+  {
+    id: 2,
+    websiteName: "Allrecipes",
+    thumbnailUrl: "/images/Gallery/foodtwo.jpg", // Placeholder - using old image
+    recipeTitle: "Festive Christmas Salad",
+    recipeUrl: "https://www.allrecipes.com/recipe/25563/christmas-salad/",
+  },
+  {
+    id: 3,
+    websiteName: "Bon Appétit",
+    thumbnailUrl: "/images/Gallery/foodthree.jpg", // Placeholder - using old image
+    recipeTitle: "Sautéed Mushrooms with Pumpkin",
+    recipeUrl: "https://www.bonappetit.com/recipe/sauteed-mushrooms-with-garlic-and-parsley", // Example URL
+  },
+  {
+    id: 4,
+    websiteName: "Serious Eats",
+    thumbnailUrl: "/images/Gallery/foodfour.jpg", // Placeholder - using old image
+    recipeTitle: "BBQ Chicken Pizza",
+    recipeUrl: "https://www.seriouseats.com/recipes/2010/06/barbecue-chicken-pizza-recipe.html", // Example URL
+  },
 ];
