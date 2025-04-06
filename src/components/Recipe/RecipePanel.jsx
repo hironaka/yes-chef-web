@@ -21,6 +21,7 @@ export default function RecipePanel({
   sendClientEvent,
   events,
 }) {
+  const [isExpanded, setIsExpanded] = useState(false);
   useEffect(() => {
     if (recipe) {
       console.log("RecipePanel received recipe data:", JSON.stringify(recipe, null, 2));
@@ -29,13 +30,13 @@ export default function RecipePanel({
     }
   }, [recipe]);
   return (
-    <section className="h-full w-full flex flex-col gap-4">
-      <div className="h-full bg-gray-50 rounded-md p-4 overflow-y-auto">
+    <section className="w-full flex flex-col gap-4"> {/* Removed h-full */}
+      <div className="bg-gray-50 rounded-md p-4 overflow-y-auto"> {/* Removed h-full */}
         {recipe ? (
           <div> {/* Removed space-y-4 */}
             <h3 className="text-lg font-semibold text-center mb-6">{decodeHtmlEntities(recipe.name)}</h3>
-            {/* Add Grid Container */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Add Grid Container with conditional height/overflow */}
+            <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 transition-max-height duration-500 ease-in-out ${isExpanded ? 'max-h-[5000px]' : 'max-h-80 overflow-hidden'}`}>
 
             <div>
               <h4 className="font-medium mb-2 text-sm">Ingredients</h4>
@@ -101,6 +102,15 @@ export default function RecipePanel({
               </ol>
             </div>
             </div> {/* Close Grid Container */}
+            {/* Add Expand/Collapse Button */}
+            <div className="mt-4 text-center">
+              <button
+                onClick={() => setIsExpanded(!isExpanded)}
+                className="text-primary hover:underline text-sm font-medium"
+              >
+                {isExpanded ? 'Show Less' : 'Show More'}
+              </button>
+            </div>
           </div>
         ) : (
           <p className="text-sm">No recipe loaded</p>
