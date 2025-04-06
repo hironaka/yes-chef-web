@@ -25,39 +25,10 @@ function SessionStopped({ startSession }) {
   );
 }
 
-function SessionActive({ stopSession, sendTextMessage }) {
-  const [message, setMessage] = useState("");
-
-  function handleSendClientEvent() {
-    sendTextMessage(message);
-    setMessage("");
-  }
+function SessionActive({ stopSession }) {
 
   return (
-    <div className="flex items-center justify-center w-full h-full gap-4">
-      <input
-        onKeyDown={(e) => {
-          if (e.key === "Enter" && message.trim()) {
-            handleSendClientEvent();
-          }
-        }}
-        type="text"
-        placeholder="send a text message..."
-        className="border border-gray-200 rounded-full p-4 flex-1"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
-      <Button
-        onClick={() => {
-          if (message.trim()) {
-            handleSendClientEvent();
-          }
-        }}
-        icon={<MessageSquare height={16} />}
-        className="bg-primary text-white hover:bg-primary/15 hover:text-primary"
-      >
-        send text
-      </Button>
+    <div className="flex items-center justify-center w-full h-full">
       <Button onClick={stopSession} icon={<CloudOff height={16} />} className="text-primary bg-primary/15 hover:text-white hover:bg-primary">
         disconnect
       </Button>
@@ -79,7 +50,6 @@ export default function SessionControls({
         <SessionActive
           stopSession={stopSession}
           sendClientEvent={sendClientEvent}
-          sendTextMessage={sendTextMessage}
           serverEvents={serverEvents}
         />
       ) : (
