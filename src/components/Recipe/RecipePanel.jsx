@@ -54,7 +54,7 @@ export default function RecipePanel({
                       <div key={index} className="mb-4 space-y-3"> {/* Container for section */}
                         <h5 className="font-medium text-lg mb-2">{decodeHtmlEntities(instruction.name)}</h5>
                         {/* Loop for HowToStep items */}
-                        <ol className="list-decimal list-inside space-y-3">
+                        <ol className="list-decimal space-y-3 pl-5">
                           {instruction.itemListElement?.map((howToStep, stepIndex) => (
                             <li key={stepIndex} className="mb-2 space-y-1"> {/* Container for step */}
                               {/* Render Step Name (if exists) */}
