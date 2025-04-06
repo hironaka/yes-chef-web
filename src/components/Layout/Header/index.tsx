@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Logo from "./Logo";
 import Image from "next/image";
 import Signin from "@/components/Auth/SignIn";
@@ -28,7 +28,7 @@ const Header = () => {
     setSticky(window.scrollY >= 20);
   };
 
-  const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = useCallback((event: MouseEvent) => {
     if (
       signInRef.current &&
       !signInRef.current.contains(event.target as Node)
@@ -48,7 +48,7 @@ const Header = () => {
     ) {
       setNavbarOpen(false);
     }
-  };
+  }, [navbarOpen, setIsSignInOpen, setIsSignUpOpen, setNavbarOpen]); // Add dependencies for useCallback
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
@@ -57,7 +57,7 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [navbarOpen, isSignInOpen, isSignUpOpen]);
+  }, [navbarOpen, isSignInOpen, isSignUpOpen, handleClickOutside]); // Add handleClickOutside to dependencies
 
   useEffect(() => {
     if (isSignInOpen || isSignUpOpen || navbarOpen) {

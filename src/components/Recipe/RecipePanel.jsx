@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Image from 'next/image';
 // Function to decode HTML entities safely
 function decodeHtmlEntities(text) {
   // Check if running in a browser environment and text is valid
@@ -76,7 +77,7 @@ export default function RecipePanel({
                                   {howToStep.itemListElement.map((tip, tipIndex) => (
                                     <li key={tipIndex} className="flex items-start gap-2">
                                       {tip.thumbnailUrl && (
-                                        <img src={tip.thumbnailUrl} alt={decodeHtmlEntities(tip.text || 'Tip image')} className="w-16 h-auto object-cover flex-shrink-0 mt-1 rounded" />
+                                        <Image src={tip.thumbnailUrl} alt={decodeHtmlEntities(tip.text || 'Tip image')} width={64} height={64} className="w-16 object-cover flex-shrink-0 mt-1 rounded" />
                                       )}
                                       <p className="text-xs flex-1">{decodeHtmlEntities(tip.text)}</p> {/* Ensure text takes remaining space */}
                                     </li>
