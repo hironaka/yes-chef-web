@@ -1,4 +1,19 @@
 import { useEffect, useState } from "react";
+// Function to decode HTML entities safely
+function decodeHtmlEntities(text) {
+  // Check if running in a browser environment and text is valid
+  if (typeof window === 'undefined' || !text) {
+    return text;
+  }
+  try {
+    const textarea = document.createElement('textarea');
+    textarea.innerHTML = text;
+    return textarea.value;
+  } catch (e) {
+    console.error("Error decoding HTML entities:", e);
+    return text; // Return original text on error
+  }
+}
 
 export default function RecipePanel({
   recipe,
@@ -18,7 +33,7 @@ export default function RecipePanel({
       <div className="h-full bg-gray-50 rounded-md p-4 overflow-y-auto">
         {recipe ? (
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold">{recipe.name}</h3>
+            <h3 className="text-xl font-semibold">{decodeHtmlEntities(recipe.name)}</h3>
 
             <div>
               <h4 className="font-medium mb-2">Ingredients</h4>
