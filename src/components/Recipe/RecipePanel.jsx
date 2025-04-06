@@ -39,7 +39,7 @@ export default function RecipePanel({
             <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 transition-max-height duration-500 ease-in-out ${isExpanded ? 'max-h-[5000px]' : 'max-h-80 overflow-hidden'}`}>
 
             <div>
-              <h4 className="font-medium mb-2 text-sm">Ingredients</h4>
+              <h4 className="font-medium mb-2 text-base">Ingredients</h4>
               <ul className="list-disc list-inside">
                 {recipe.recipeIngredient?.map((ingredient, index) => (
                   <li key={index} className="mb-1 text-sm">
