@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState, useCallback } from "react";
-import EventLog from "./EventLog";
 import SessionControls from "./SessionControls";
 import RecipePanel from "./RecipePanel";
 import { generateToken } from '@/app/lib/actions';
@@ -10,7 +9,6 @@ import Header from '@/components/Layout/Header';
 
 export default function App() {
   const [isSessionActive, setIsSessionActive] = useState(false);
-  const [events, setEvents] = useState([]);
   const [dataChannel, setDataChannel] = useState(null);
   const [recipe, setRecipe] = useState(null);
   const peerConnection = useRef(null);
@@ -89,8 +87,8 @@ export default function App() {
   const sendClientEvent = useCallback((message) => {
     if (dataChannel) {
       message.event_id = message.event_id || crypto.randomUUID();
+      console.log('Client Event:', JSON.stringify(message, null, 2));
       dataChannel.send(JSON.stringify(message));
-      setEvents((prev) => [message, ...prev]);
     } else {
       console.error(
         "Failed to send message - no data channel available",
@@ -124,13 +122,12 @@ export default function App() {
     if (dataChannel) {
       // Append new server events to the list
       dataChannel.addEventListener("message", (e) => {
-        setEvents((prev) => [JSON.parse(e.data), ...prev]);
+        console.log('Server Event:', JSON.stringify(JSON.parse(e.data), null, 2));
       });
 
       // Set session active when the data channel is opened
       dataChannel.addEventListener("open", () => {
         setIsSessionActive(true);
-        setEvents([]);
       });
     }
   }, [dataChannel]);
@@ -185,7 +182,6 @@ export default function App() {
       <main className="absolute top-16 left-0 right-0 bottom-0">
         <section className="absolute top-0 left-0 right-[380px] bottom-0 flex">
           <section className="absolute top-0 left-0 right-0 bottom-32 px-4 overflow-y-auto">
-            <EventLog events={events} />
           </section>
           <section className="absolute h-32 left-0 right-0 bottom-0 p-4">
             <SessionControls
@@ -193,7 +189,6 @@ export default function App() {
               stopSession={stopSession}
               sendClientEvent={sendClientEvent}
               sendTextMessage={sendTextMessage}
-              events={events}
               isSessionActive={isSessionActive}
             />
           </section>
@@ -203,7 +198,6 @@ export default function App() {
             recipe={recipe}
             sendClientEvent={sendClientEvent}
             sendTextMessage={sendTextMessage}
-            events={events}
             isSessionActive={isSessionActive}
           />
         </section>
