@@ -6,6 +6,13 @@ export default function RecipePanel({
   sendClientEvent,
   events,
 }) {
+  useEffect(() => {
+    if (recipe) {
+      console.log("RecipePanel received recipe data:", JSON.stringify(recipe, null, 2));
+    } else {
+      console.log("RecipePanel received null/undefined recipe.");
+    }
+  }, [recipe]);
   return (
     <section className="h-full w-full flex flex-col gap-4">
       <div className="h-full bg-gray-50 rounded-md p-4 overflow-y-auto">
