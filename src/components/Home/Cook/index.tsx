@@ -21,7 +21,6 @@ const Cook = () => {
                         </h2>
                         <p className='text-black/50 dark:text-white/50 md:text-lg font-normal mb-10 text-start mt-6'>No more squinting at screens with messy hands! Our Chrome extension turns any online recipe into a hands-free, voice-guided experience. Just install, select your recipe, and let AI walk you through step by step—so you can focus on cooking, not reading.</p>
                         <p className='text-black/50 dark:text-white/50 md:text-lg font-normal mb-10 text-start'>Need to pause? Just ask. Wondering “What’s the next step?” or “What can I substitute for this ingredient?”—our AI has the answers. Whether you're chopping, stirring, or adjusting on the fly, your voice assistant is there to help.</p>
-                        <button className='text-xl font-medium rounded-full text-white py-5 px-6 bg-primary lg:px-10 mr-6 w-fit border border-primary hover:bg-transparent hover:text-primary'>Install now</button>
                     </div>
                 </div>
             </div>
