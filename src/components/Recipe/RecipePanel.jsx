@@ -33,13 +33,13 @@ export default function RecipePanel({
       <div className="h-full bg-gray-50 rounded-md p-4 overflow-y-auto">
         {recipe ? (
           <div className="space-y-4">
-            <h3 className="text-xl font-semibold">{decodeHtmlEntities(recipe.name)}</h3>
+            <h3 className="text-lg font-semibold">{decodeHtmlEntities(recipe.name)}</h3>
 
             <div>
-              <h4 className="font-medium mb-2">Ingredients</h4>
+              <h4 className="font-medium mb-2 text-sm">Ingredients</h4>
               <ul className="list-disc list-inside">
                 {recipe.recipeIngredient?.map((ingredient, index) => (
-                  <li key={index} className="mb-1">
+                  <li key={index} className="mb-1 text-sm">
                     {typeof ingredient === 'string' ? ingredient : ingredient.name}
                   </li>
                 ))}
@@ -52,18 +52,18 @@ export default function RecipePanel({
                   if (instruction["@type"] === "HowToSection") {
                     return (
                       <div key={index} className="mb-4 space-y-3"> {/* Container for section */}
-                        <h5 className="font-medium text-lg mb-2">{decodeHtmlEntities(instruction.name)}</h5>
+                        <h5 className="font-medium text-base mb-2">{decodeHtmlEntities(instruction.name)}</h5>
                         {/* Loop for HowToStep items */}
                         <ol className="list-decimal space-y-3 pl-5">
                           {instruction.itemListElement?.map((howToStep, stepIndex) => (
                             <li key={stepIndex} className="mb-2 space-y-1"> {/* Container for step */}
                               {/* Render Step Name (if exists) */}
                               {howToStep.name && (
-                                <h6 className="font-semibold">{decodeHtmlEntities(howToStep.name)}</h6>
+                                <h6 className="font-semibold text-sm">{decodeHtmlEntities(howToStep.name)}</h6>
                               )}
                               {/* Render Step Description (if exists) */}
                               {howToStep.description && (
-                                <p className="text-sm text-gray-600">{decodeHtmlEntities(howToStep.description)}</p>
+                                <p className="text-xs text-gray-600">{decodeHtmlEntities(howToStep.description)}</p>
                               )}
 
                               {/* Render EITHER tips OR the main step text */}
@@ -75,13 +75,13 @@ export default function RecipePanel({
                                       {tip.thumbnailUrl && (
                                         <img src={tip.thumbnailUrl} alt={decodeHtmlEntities(tip.text || 'Tip image')} className="w-16 h-auto object-cover flex-shrink-0 mt-1 rounded" />
                                       )}
-                                      <p className="text-sm flex-1">{decodeHtmlEntities(tip.text)}</p> {/* Ensure text takes remaining space */}
+                                      <p className="text-xs flex-1">{decodeHtmlEntities(tip.text)}</p> {/* Ensure text takes remaining space */}
                                     </li>
                                   ))}
                                 </ul>
                               ) : howToStep.text ? (
                                 // Otherwise, render Step Text if it exists
-                                <p>{decodeHtmlEntities(howToStep.text)}</p>
+                                <p className="text-sm">{decodeHtmlEntities(howToStep.text)}</p>
                               ) : null /* Handle case where a step might have name/desc but no text/tips */}
                             </li>
                           ))}
@@ -90,7 +90,7 @@ export default function RecipePanel({
                     );
                   } else {
                     return (
-                      <li key={index} className="mb-2">
+                      <li key={index} className="mb-2 text-sm">
                         {instruction.text || instruction}
                       </li>
                     );
@@ -100,7 +100,7 @@ export default function RecipePanel({
             </div>
           </div>
         ) : (
-          <p>No recipe loaded</p>
+          <p className="text-sm">No recipe loaded</p>
         )}
       </div>
     </section>
