@@ -51,12 +51,38 @@ export default function RecipePanel({
                 {recipe.recipeInstructions?.map((instruction, index) => {
                   if (instruction["@type"] === "HowToSection") {
                     return (
-                      <div key={index} className="mb-4">
-                        <h5 className="font-medium mb-2">{instruction.name}</h5>
-                        <ol className="list-decimal list-inside">
-                          {instruction.itemListElement.map((step, stepIndex) => (
-                            <li key={stepIndex} className="mb-2">
-                              {step.text}
+                      <div key={index} className="mb-4 space-y-3"> {/* Container for section */}
+                        <h5 className="font-medium text-lg mb-2">{decodeHtmlEntities(instruction.name)}</h5>
+                        {/* Loop for HowToStep items */}
+                        <ol className="list-decimal list-inside space-y-3">
+                          {instruction.itemListElement?.map((howToStep, stepIndex) => (
+                            <li key={stepIndex} className="mb-2 space-y-1"> {/* Container for step */}
+                              {/* Render Step Name (if exists) */}
+                              {howToStep.name && (
+                                <h6 className="font-semibold">{decodeHtmlEntities(howToStep.name)}</h6>
+                              )}
+                              {/* Render Step Description (if exists) */}
+                              {howToStep.description && (
+                                <p className="text-sm text-gray-600">{decodeHtmlEntities(howToStep.description)}</p>
+                              )}
+
+                              {/* Render EITHER tips OR the main step text */}
+                              {howToStep.itemListElement ? (
+                                // Render Tips if they exist
+                                <ul className="list-none pl-4 space-y-2 mt-2"> {/* Indent tips */}
+                                  {howToStep.itemListElement.map((tip, tipIndex) => (
+                                    <li key={tipIndex} className="flex items-start gap-2">
+                                      {tip.thumbnailUrl && (
+                                        <img src={tip.thumbnailUrl} alt={decodeHtmlEntities(tip.text || 'Tip image')} className="w-16 h-auto object-cover flex-shrink-0 mt-1 rounded" />
+                                      )}
+                                      <p className="text-sm flex-1">{decodeHtmlEntities(tip.text)}</p> {/* Ensure text takes remaining space */}
+                                    </li>
+                                  ))}
+                                </ul>
+                              ) : howToStep.text ? (
+                                // Otherwise, render Step Text if it exists
+                                <p>{decodeHtmlEntities(howToStep.text)}</p>
+                              ) : null /* Handle case where a step might have name/desc but no text/tips */}
                             </li>
                           ))}
                         </ol>
