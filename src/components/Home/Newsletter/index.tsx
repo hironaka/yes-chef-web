@@ -11,7 +11,7 @@ const Newsletter = () => {
                         <div className="m-10 lg:ml-32 lg:mt-20 lg:mb-20">
                             <p className="text-lg font-normal text-white mb-3 ls-51"> NEWSLETTER </p>
                             <h2 className="text-3xl md:text-5xl font-semibold text-white mb-8">
-                                Subscribe our <br /> newsletter.
+                                Subscribe to our <br /> newsletter.
                             </h2>
 
                             <div>
