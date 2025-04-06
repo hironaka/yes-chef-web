@@ -8,11 +8,11 @@ const Cook = () => {
         <section className='relative' id="about-section">
             <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md">
                 <div className='absolute right-0 bottom-[-18%] hidden lg:block'>
-                    <Image src='/images/Cook/burger.png' alt="burger-image" width={463} height={622} />
+                    <Image src='/images/cook/burger.png' alt="burger-image" width={463} height={622} />
                 </div>
                 <div className='grid grid-cols-1 lg:grid-cols-12 my-16 space-x-5'>
                     <div className='col-span-6 flex justify-start'>
-                        <Image src="/images/Cook/cook.png" alt="nothing" width={636} height={808} />
+                        <Image src="/images/cook/cook.png" alt="nothing" width={636} height={808} />
                     </div>
                     <div className='col-span-6 flex flex-col justify-center'>
                         <p className='text-primary text-lg font-normal mb-3 tracking-widest uppercase text-center md:text-left'>cook with us</p>
