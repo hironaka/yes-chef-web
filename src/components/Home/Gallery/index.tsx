@@ -11,7 +11,7 @@ const Gallery = () => {
                 <div className="text-center">
                     <p className='text-primary text-lg font-normal mb-3 tracking-widest uppercase'>Featured Recipes</p> {/* Updated heading */}
                     <h2 className="text-3xl lg:text-5xl font-semibold text-black dark:text-white">
-                        Explore hand-selected recipes from around the web.
+                        Cook recipes from around the web.
                     </h2>
                 </div>
                 <div className="my-16 px-6">

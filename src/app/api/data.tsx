@@ -75,30 +75,30 @@ export interface FeaturedRecipe {
 export const featuredRecipes: FeaturedRecipe[] = [
   {
     id: 1,
-    websiteName: "Food Network",
-    thumbnailUrl: "/images/Gallery/foodone.jpg", // Placeholder - using old image
-    recipeTitle: "Classic Caesar Salad",
-    recipeUrl: "https://www.foodnetwork.com/recipes/food-network-kitchen/classic-caesar-salad-recipe-1973506",
-  },
-  {
-    id: 2,
     websiteName: "Allrecipes",
-    thumbnailUrl: "/images/Gallery/foodtwo.jpg", // Placeholder - using old image
-    recipeTitle: "Festive Christmas Salad",
-    recipeUrl: "https://www.allrecipes.com/recipe/25563/christmas-salad/",
+    thumbnailUrl: "/images/Gallery/worlds-best-lasagna.webp",
+    recipeTitle: "World's Best Lasagna",
+    recipeUrl: "https://www.allrecipes.com/recipe/23600/worlds-best-lasagna/",
   },
   {
-    id: 3,
-    websiteName: "Bon Appétit",
-    thumbnailUrl: "/images/Gallery/foodthree.jpg", // Placeholder - using old image
-    recipeTitle: "Sautéed Mushrooms with Pumpkin",
-    recipeUrl: "https://www.bonappetit.com/recipe/sauteed-mushrooms-with-garlic-and-parsley", // Example URL
+    "id": 2,
+    "websiteName": "Food Network",
+    "thumbnailUrl": "/images/Gallery/chicken.webp",
+    "recipeTitle": "Perfect Roast Chicken",
+    "recipeUrl": "https://www.foodnetwork.com/recipes/ina-garten/perfect-roast-chicken-recipe-1940592"
   },
   {
-    id: 4,
-    websiteName: "Serious Eats",
-    thumbnailUrl: "/images/Gallery/foodfour.jpg", // Placeholder - using old image
-    recipeTitle: "BBQ Chicken Pizza",
-    recipeUrl: "https://www.seriouseats.com/recipes/2010/06/barbecue-chicken-pizza-recipe.html", // Example URL
+    "id": 3,
+    "websiteName": "Smitten Kitchen",
+    "thumbnailUrl": "/images/Gallery/apple-cake.webp",
+    "recipeTitle": "Mom's Apple Cake",
+    "recipeUrl": "https://smittenkitchen.com/2008/09/moms-apple-cake/"
+  },
+  {
+    "id": 4,
+    "websiteName": "America's Test Kitchen",
+    "thumbnailUrl": "/images/Gallery/cookies.webp",
+    "recipeTitle": "Perfect Chocolate Chip Cookies",
+    "recipeUrl": "https://www.americastestkitchen.com/recipes/4737-perfect-chocolate-chip-cookies"
   },
 ];
