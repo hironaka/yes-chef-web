@@ -2,21 +2,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { headerData } from "../Header/Navigation/menuData";
 import Logo from "./Logo";
 import Image from "next/image";
-import HeaderLink from "../Header/Navigation/HeaderLink";
-import MobileHeaderLink from "../Header/Navigation/MobileHeaderLink";
 import Signin from "@/components/Auth/SignIn";
 import SignUp from "@/components/Auth/SignUp";
 import { useTheme } from "next-themes";
 import { Icon } from "@iconify/react/dist/iconify.js";
 
-interface HeaderProps {
-  showNav?: boolean;
-}
 
-const Header: React.FC<HeaderProps> = ({ showNav = true }) => {
+const Header = () => {
   const pathUrl = usePathname();
   const { theme, setTheme } = useTheme();
 
@@ -81,13 +75,7 @@ const Header: React.FC<HeaderProps> = ({ showNav = true }) => {
       <div className="lg:py-0 py-2">
         <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md flex items-center justify-between px-4">
           <Logo />
-          {showNav && (
-            <nav className="hidden lg:flex flex-grow items-center gap-8 justify-center">
-              {headerData.map((item, index) => (
-                <HeaderLink key={index} item={item} />
-              ))}
-            </nav>
-          )}
+          {/* Navigation removed */}
           <div className="flex items-center gap-4">
             <Link
               href="#"
@@ -179,10 +167,7 @@ const Header: React.FC<HeaderProps> = ({ showNav = true }) => {
             ></button>
           </div>
           <nav className="flex flex-col items-start p-4">
-            {showNav &&
-              headerData.map((item, index) => (
-                <MobileHeaderLink key={index} item={item} />
-              ))}
+            {/* Mobile navigation links removed */}
             <div className="mt-4 flex flex-col space-y-4 w-full">
               <Link
                 href="#"
