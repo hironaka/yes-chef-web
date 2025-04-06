@@ -32,8 +32,10 @@ export default function RecipePanel({
     <section className="h-full w-full flex flex-col gap-4">
       <div className="h-full bg-gray-50 rounded-md p-4 overflow-y-auto">
         {recipe ? (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">{decodeHtmlEntities(recipe.name)}</h3>
+          <div> {/* Removed space-y-4 */}
+            <h3 className="text-lg font-semibold text-center mb-6">{decodeHtmlEntities(recipe.name)}</h3>
+            {/* Add Grid Container */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
             <div>
               <h4 className="font-medium mb-2 text-sm">Ingredients</h4>
@@ -98,6 +100,7 @@ export default function RecipePanel({
                 })}
               </ol>
             </div>
+            </div> {/* Close Grid Container */}
           </div>
         ) : (
           <p className="text-sm">No recipe loaded</p>
