@@ -9,6 +9,7 @@ This project is a web interface for an AI-powered recipe assistant called "Yes C
 *   [TypeScript](https://www.typescriptlang.org/)
 *   [Tailwind CSS](https://tailwindcss.com/)
 *   [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime)
+*   [Google Cloud Vertex AI](https://cloud.google.com/vertex-ai) (for recipe extraction)
 *   [WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API)
 
 **Key Feature:** Real-time voice and text interaction with an AI assistant based on the recipe currently being viewed.
@@ -37,15 +38,24 @@ This project is a web interface for an AI-powered recipe assistant called "Yes C
     ```
 
 3.  **Set up environment variables:**
-    *   You'll need an OpenAI API key. [Create one here if you don't have one](https://platform.openai.com/settings/api-keys).
     *   Copy the example environment file:
         ```bash
         cp .env.example .env.local
         ```
+    *   You'll need an OpenAI API key. [Create one here if you don't have one](https://platform.openai.com/settings/api-keys).
     *   Open `.env.local` and add your OpenAI API key:
         ```
         OPENAI_API_KEY=your_openai_api_key_here
         ```
+    *   This project also uses Google Cloud Vertex AI for recipe extraction. You'll need Google Cloud credentials.
+    *   Copy the example environment file:
+        ```bash
+        cp .env.example .env.local
+        ```
+    *   Open `.env.local` and configure it according to the instructions within `.env.example`. This involves setting your `GCP_PROJECT` ID and potentially `GCP_LOCATION`.
+    *   **Authentication:**
+        *   **Local Development:** The recommended way is to use Application Default Credentials (ADC). Run `gcloud auth application-default login` in your terminal. Alternatively, download a service account key file, store it securely **outside** your project repository, and set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of that file (e.g., `export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/secure/keyfile.json"`).
+        *   **Heroku Deployment:** Follow the instructions in `.env.example` to set the `GCP_SA_KEY_JSON` config variable in Heroku with the *content* of your downloaded service account key file. The included `Procfile` will handle setting `GOOGLE_APPLICATION_CREDENTIALS` automatically at runtime.
 
 ### Running the Development Server
 

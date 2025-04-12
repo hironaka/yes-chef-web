@@ -33,8 +33,13 @@ yarn-error.log*
 next-env.d.ts
 
 # environment variables
-.env
-.env.production
+.env*
+.env.*
+!.env.example
+
+# Service account keys / sensitive config
+*-key.json
+*.private.json
 
 # documentation
 docs/
