@@ -10,14 +10,12 @@ interface LayoutWrapperProps {
 
 export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   const pathname = usePathname()
-  const hideHeaderOn = ['/recipe']
-  const shouldHideHeader = hideHeaderOn.includes(pathname)
 
   return (
     <>
-      {!shouldHideHeader && <Header />}
+      {<Header />}
       {children}
-      {!shouldHideHeader && <Footer />}
+      {<Footer />}
     </>
   )
 }

@@ -5,7 +5,6 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import SessionControls from "./SessionControls";
 import RecipePanel from "./RecipePanel";
 import { generateToken } from '@/app/lib/actions';
-import Header from '@/components/Layout/Header';
 
 export default function App() {
   const [isSessionActive, setIsSessionActive] = useState(false);
@@ -178,7 +177,6 @@ export default function App() {
 
   return (
     <>
-      <Header showNav={false} />
       <main className="flex flex-col items-center min-h-screen pt-20 px-4">
         <div className="w-full max-w-4xl p-4">
           <RecipePanel
