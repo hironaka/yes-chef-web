@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 export default function PricingPage() {
   return (
-    <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4 mt-32">
+    <div className="container mx-auto lg:max-w-screen-xl md:max-w-screen-md px-4 mt-36">
       <h1 className="text-4xl font-bold text-center mb-12">Pricing Plans</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
 

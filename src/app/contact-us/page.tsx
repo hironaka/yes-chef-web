@@ -53,7 +53,7 @@ const ContactUsPage: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container mx-auto px-4 pt-36 pb-12">
       <h1 className="text-3xl font-bold mb-8 text-center">Contact Us</h1>
       <form
         onSubmit={handleSubmit}
