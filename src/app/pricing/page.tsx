@@ -15,7 +15,7 @@ export default function PricingPage() {
             <li>Works with any recipe website</li>
           </ul>
           <Link href="/recipe">
-            <button className="w-full bg-primary text-white py-2 px-4 rounded hover:bg-opacity-90 transition duration-200">
+            <button className="w-full bg-primary text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition duration-200">
               Get Started
             </button>
           </Link>
@@ -31,7 +31,7 @@ export default function PricingPage() {
           </ul>
           <button
             disabled
-            className="w-full bg-gray-400 text-white py-2 px-4 rounded cursor-not-allowed"
+            className="w-full bg-gray-400 text-white py-2 px-4 rounded-full cursor-not-allowed"
           >
             Coming Soon
           </button>
