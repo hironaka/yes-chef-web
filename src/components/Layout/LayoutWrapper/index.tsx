@@ -11,11 +11,14 @@ interface LayoutWrapperProps {
 export default function LayoutWrapper({ children }: LayoutWrapperProps) {
   const pathname = usePathname()
 
+  const pathsWithoutFooter = ['/recipe', '/pricing', '/contact-us'];
+  const shouldShowFooter = !pathsWithoutFooter.includes(pathname);
+
   return (
     <>
-      {<Header />}
+      <Header />
       {children}
-      {<Footer />}
+      {shouldShowFooter && <Footer />}
     </>
   )
 }
