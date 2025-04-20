@@ -88,7 +88,7 @@ const Header = () => {
                 </span>
                 <button
                   onClick={() => signOut()}
-                  className="hidden lg:block bg-red-500 text-white hover:bg-red-600 font-medium text-lg py-4 px-8 rounded-full"
+                  className="hidden lg:block text-primary bg-primary/15 hover:text-white hover:bg-primary font-medium text-lg py-4 px-8 rounded-full"
                 >
                   Sign Out
                 </button>
@@ -205,7 +205,7 @@ const Header = () => {
                       signOut();
                       setNavbarOpen(false); // Close menu on sign out
                     }}
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                    className="bg-transparent border border-primary text-primary px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white"
                   >
                     Sign Out
                   </button>
