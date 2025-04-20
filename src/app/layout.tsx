@@ -2,7 +2,8 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Layout/Header";
 import Footer from "@/components/Layout/Footer";
-import { ThemeProvider } from "next-themes";
+// Removed ThemeProvider and SessionProvider imports
+import { Providers } from "@/components/Providers"; // Import the new Providers component
 import ScrollToTop from "@/components/ScrollToTop";
 import LayoutWrapper from "@/components/Layout/LayoutWrapper"
 
@@ -16,16 +17,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${font.className}`}>
-        <ThemeProvider
-          attribute="class"
-          enableSystem={true}
-          defaultTheme="light"
-        >
+        <Providers> {/* Use the Providers component */}
           <LayoutWrapper>
             {children}
           </LayoutWrapper>
           <ScrollToTop />
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );
