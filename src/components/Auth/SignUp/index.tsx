@@ -18,21 +18,30 @@ const SignUp = () => {
     const value = Object.fromEntries(data.entries());
     const finalData = { ...value };
 
-    fetch("/api/register", {
+    fetch("/api/auth/register", { // Correct API endpoint
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(finalData),
     })
-      .then((res) => res.json())
+      .then(async (res) => { // Make async to await text() on error
+        if (!res.ok) {
+          // If response is not OK, parse error message from text body
+          const errorText = await res.text();
+          throw new Error(errorText || "Registration failed"); // Throw error to be caught below
+        }
+        return res.json(); // If OK, parse JSON body
+      })
       .then((data) => {
-        toast.success("Successfully registered");
+        toast.success("Successfully registered! Please sign in.");
         setLoading(false);
-        router.push("/signin");
+        router.push("/"); // Redirect to home or sign-in page after successful registration
+        // Consider closing the modal if this component is used within one
       })
       .catch((err) => {
-        toast.error(err.message);
+        console.error("Registration Fetch Error:", err);
+        toast.error(err.message || "An unexpected error occurred."); // Display specific API error or generic message
         setLoading(false);
       });
   };

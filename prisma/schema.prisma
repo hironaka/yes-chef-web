@@ -47,6 +47,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  password      String?   // Added password field for credentials auth
   accounts      Account[]
   sessions      Session[]
   // Add other user fields here if needed, e.g., subscriptionStatus
