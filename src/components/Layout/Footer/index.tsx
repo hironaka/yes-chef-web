@@ -13,7 +13,7 @@ const Footer: FC = () => {
           </p>
 
           <div className="">
-            <Link href="/contact-us" className="text-sm text-black/70 dark:text-white/70 px-5 hover:text-primary dark:hover:text-primary">Contact us</Link>
+            <Link href="/contact" className="text-sm text-black/70 dark:text-white/70 px-5 hover:text-primary dark:hover:text-primary">Contact us</Link>
           </div>
         </div>
       </div>
