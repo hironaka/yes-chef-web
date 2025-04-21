@@ -122,7 +122,7 @@ const Header = () => {
                           className="text-black hover:text-primary text-24 inline-block me-2"
                         />
                       </button>
-                      <Signin />
+                      <Signin setIsSignInOpen={setIsSignInOpen} setIsSignUpOpen={setIsSignUpOpen} />
                     </div>
                   </div>
                 )}
@@ -152,7 +152,7 @@ const Header = () => {
                           className="text-white hover:text-primary text-24 inline-block me-2"
                         />
                       </button>
-                      <SignUp />
+                      <SignUp setIsSignInOpen={setIsSignInOpen} setIsSignUpOpen={setIsSignUpOpen} />
                     </div>
                   </div>
                 )}

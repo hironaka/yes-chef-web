@@ -4,9 +4,15 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import SocialSignUp from "../SocialSignUp";
 import Logo from "@/components/Layout/Header/Logo";
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import Loader from "@/components/Common/Loader";
-const SignUp = () => {
+
+interface SignUpProps {
+  setIsSignInOpen: Dispatch<SetStateAction<boolean>>;
+  setIsSignUpOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const SignUp: React.FC<SignUpProps> = ({ setIsSignInOpen, setIsSignUpOpen }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -111,9 +117,15 @@ const SignUp = () => {
 
       <p className="text-body-secondary text-white text-base">
         Already have an account?
-        <Link href="/" className="pl-2 text-primary hover:underline">
+        <button
+          onClick={() => {
+            setIsSignUpOpen(false);
+            setIsSignInOpen(true);
+          }}
+          className="pl-2 text-primary hover:underline bg-transparent border-none p-0 cursor-pointer"
+        >
           Sign In
-        </Link>
+        </button>
       </p>
     </>
   );

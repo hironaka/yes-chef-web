@@ -2,13 +2,18 @@
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
 import SocialSignIn from "../SocialSignIn";
 import Logo from "@/components/Layout/Header/Logo"
 import Loader from "@/components/Common/Loader";
 
-const Signin = () => {
+interface SignInProps {
+  setIsSignInOpen: Dispatch<SetStateAction<boolean>>;
+  setIsSignUpOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+const Signin: React.FC<SignInProps> = ({ setIsSignInOpen, setIsSignUpOpen }) => {
   const router = useRouter();
 
   const [loginData, setLoginData] = useState({
@@ -98,9 +103,15 @@ const Signin = () => {
       </Link>
       <p className="text-body-secondary text-white text-base">
         Not a member yet?{" "}
-        <Link href="/" className="text-primary hover:underline">
+        <button
+          onClick={() => {
+            setIsSignInOpen(false);
+            setIsSignUpOpen(true);
+          }}
+          className="text-primary hover:underline bg-transparent border-none p-0 cursor-pointer"
+        >
           Sign Up
-        </Link>
+        </button>
       </p>
     </>
   );
