@@ -61,3 +61,13 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model DataDeletionRequest {
+  id              String   @id @default(cuid())
+  confirmationCode String   @unique
+  facebookUserId  String?  // The App-Scoped User ID from Facebook
+  status          String   // e.g., 'pending', 'success', 'failed', 'not_found'
+  message         String?  // Optional message, e.g., error details
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
