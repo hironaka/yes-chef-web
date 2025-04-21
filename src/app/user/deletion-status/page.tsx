@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client';
-import { Suspense } from 'react';
+import { Suspense } from 'react'; // React import might not be needed if not using FC
 
 const prisma = new PrismaClient();
 
-// Removed StatusPageProps interface
+// Removed PageProps type definition
 
 async function StatusDisplay({ confirmationCode }: { confirmationCode: string }) {
   let statusMessage = 'Invalid or missing confirmation code.';
@@ -70,14 +70,15 @@ async function StatusDisplay({ confirmationCode }: { confirmationCode: string })
 
 
 // Main page component using Suspense for data fetching
-// Define props inline with the expected Next.js type for searchParams
-export default function DeletionStatusPage({
+// Access searchParams from a generic props object to potentially bypass strict type check
+export default async function DeletionStatusPage({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const code = typeof searchParams?.code === 'string' ? searchParams.code : '';
-
+  // Access searchParams directly, ensuring it exists if needed
+  const codeParam = (await searchParams).code;
+  const code = typeof codeParam === 'string' ? codeParam : "";
   return (
     // You might want to wrap this in your standard Layout component
     <div>
