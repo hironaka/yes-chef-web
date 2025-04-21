@@ -3,9 +3,7 @@ import { Suspense } from 'react';
 
 const prisma = new PrismaClient();
 
-interface StatusPageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
-}
+// Removed StatusPageProps interface
 
 async function StatusDisplay({ confirmationCode }: { confirmationCode: string }) {
   let statusMessage = 'Invalid or missing confirmation code.';
@@ -72,8 +70,13 @@ async function StatusDisplay({ confirmationCode }: { confirmationCode: string })
 
 
 // Main page component using Suspense for data fetching
-export default function DeletionStatusPage({ searchParams }: StatusPageProps) {
-  const code = typeof searchParams.code === 'string' ? searchParams.code : '';
+// Define props inline with the expected Next.js type for searchParams
+export default function DeletionStatusPage({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
+  const code = typeof searchParams?.code === 'string' ? searchParams.code : '';
 
   return (
     // You might want to wrap this in your standard Layout component
