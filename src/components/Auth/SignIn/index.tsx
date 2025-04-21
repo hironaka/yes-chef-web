@@ -97,11 +97,11 @@ const Signin: React.FC<SignInProps> = ({ setIsSignInOpen, setIsSignUpOpen }) => 
 
       <Link
         href="/forgot-password"
-        className="mb-2 inline-block text-base text-dark hover:text-primary text-white dark:hover:text-primary"
+        className="mb-2 inline-block text-base text-dark hover:text-primary text-grey dark:hover:text-primary"
       >
         Forgot Password?
       </Link>
-      <p className="text-body-secondary text-white text-base">
+      <p className="text-body-secondary text-grey text-base">
         Not a member yet?{" "}
         <button
           onClick={() => {
