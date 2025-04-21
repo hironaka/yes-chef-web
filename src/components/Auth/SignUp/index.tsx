@@ -100,11 +100,11 @@ const SignUp = () => {
 
       <p className="text-body-secondary mb-4 text-white text-base">
         By creating an account you are agree with our{" "}
-        <Link href="/#" className="text-primary hover:underline">
+        <Link href="https://www.privacypolicies.com/live/ad275672-77bf-440f-93ac-d85d4711e860" className="text-primary hover:underline">
           Privacy
         </Link>{" "}
         and{" "}
-        <Link href="/#" className="text-primary hover:underline">
+        <Link href="https://www.privacypolicies.com/live/393cca5a-d5f1-4f21-9f38-22ef85da90c9" className="text-primary hover:underline">
           Policy
         </Link>
       </p>
