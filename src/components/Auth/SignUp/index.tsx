@@ -8,8 +8,8 @@ import { useState, Dispatch, SetStateAction } from "react";
 import Loader from "@/components/Common/Loader";
 
 interface SignUpProps {
-  setIsSignInOpen: Dispatch<SetStateAction<boolean>>;
-  setIsSignUpOpen: Dispatch<SetStateAction<boolean>>;
+  setIsSignInOpen?: Dispatch<SetStateAction<boolean>>;
+  setIsSignUpOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 const SignUp: React.FC<SignUpProps> = ({ setIsSignInOpen, setIsSignUpOpen }) => {
@@ -119,8 +119,12 @@ const SignUp: React.FC<SignUpProps> = ({ setIsSignInOpen, setIsSignUpOpen }) => 
         Already have an account?
         <button
           onClick={() => {
-            setIsSignUpOpen(false);
-            setIsSignInOpen(true);
+            if (setIsSignInOpen && setIsSignUpOpen) {
+              setIsSignUpOpen(false);
+              setIsSignInOpen(true);
+            } else {
+              router.push("/signin");
+            }
           }}
           className="pl-2 text-primary hover:underline bg-transparent border-none p-0 cursor-pointer"
         >

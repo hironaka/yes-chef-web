@@ -9,8 +9,8 @@ import Logo from "@/components/Layout/Header/Logo"
 import Loader from "@/components/Common/Loader";
 
 interface SignInProps {
-  setIsSignInOpen: Dispatch<SetStateAction<boolean>>;
-  setIsSignUpOpen: Dispatch<SetStateAction<boolean>>;
+  setIsSignInOpen?: Dispatch<SetStateAction<boolean>>;
+  setIsSignUpOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 const Signin: React.FC<SignInProps> = ({ setIsSignInOpen, setIsSignUpOpen }) => {
@@ -105,8 +105,12 @@ const Signin: React.FC<SignInProps> = ({ setIsSignInOpen, setIsSignUpOpen }) => 
         Not a member yet?{" "}
         <button
           onClick={() => {
-            setIsSignInOpen(false);
-            setIsSignUpOpen(true);
+            if (setIsSignInOpen && setIsSignUpOpen) {
+              setIsSignInOpen(false);
+              setIsSignUpOpen(true);
+            } else {
+              router.push("/signup");
+            }
           }}
           className="text-primary hover:underline bg-transparent border-none p-0 cursor-pointer"
         >
