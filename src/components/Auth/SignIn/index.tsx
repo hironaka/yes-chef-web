@@ -88,7 +88,7 @@ const Signin: React.FC<SignInProps> = ({ setIsSignInOpen, setIsSignUpOpen }) => 
           <button
             onClick={loginUser}
             type="submit"
-            className="bg-primary w-full py-3 rounded-lg text-18 font-medium border border-primary hover:text-primary hover:bg-transparent"
+            className="bg-primary text-white w-full py-3 rounded-lg text-18 font-medium border border-primary hover:text-primary hover:bg-transparent"
           >
             Sign In {loading && <Loader />}
           </button>
