@@ -80,7 +80,7 @@ const Header = () => {
           {/* Navigation removed */}
           <div className="flex items-center gap-4">
             {status === "loading" ? (
-              <div className="hidden lg:block h-12 w-48 bg-gray-200 dark:bg-gray-700 animate-pulse rounded-full"></div> // Loading placeholder
+              <></>
             ) : status === "authenticated" ? (
               <>
                 <span className="hidden lg:block text-gray-700 dark:text-gray-200 mr-2">
