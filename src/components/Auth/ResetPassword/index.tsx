@@ -67,7 +67,7 @@ const ResetPassword = ({ token }: { token: string }) => {
       if (res.status === 200) {
         toast.success(res.data);
         setData({ newPassword: "", ReNewPassword: "" });
-        router.push("/signin");
+        router.push("/");
       }
 
       setLoader(false);
@@ -78,7 +78,7 @@ const ResetPassword = ({ token }: { token: string }) => {
   };
 
   return (
-    <section className="bg-[#F4F7FF] py-14 dark:bg-dark lg:py-20">
+    <section className="bg-[#F4F7FF] py-44 dark:bg-dark lg:py-44">
       <div className="container">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
@@ -86,25 +86,6 @@ const ResetPassword = ({ token }: { token: string }) => {
               className="wow fadeInUp relative mx-auto max-w-[525px] overflow-hidden rounded-lg bg-white px-8 py-14 text-center dark:bg-dark-2 sm:px-12 md:px-[60px]"
               data-wow-delay=".15s"
             >
-              <div className="mb-10 text-center">
-                <Link href="/" className="mx-auto inline-block max-w-[160px]">
-                  <Image
-                    src="/images/logo/logo.svg"
-                    alt="logo"
-                    width={140}
-                    height={30}
-                    className="dark:hidden"
-                  />
-                  <Image
-                    src="/images/logo/logo-white.svg"
-                    alt="logo"
-                    width={140}
-                    height={30}
-                    className="hidden dark:block"
-                  />
-                </Link>
-              </div>
-
               <form onSubmit={handleSubmit}>
                 <div className="mb-[22px]">
                   <input
