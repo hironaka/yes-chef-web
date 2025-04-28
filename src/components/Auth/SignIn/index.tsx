@@ -97,6 +97,11 @@ const Signin: React.FC<SignInProps> = ({ setIsSignInOpen, setIsSignUpOpen }) => 
 
       <Link
         href="/forgot-password"
+        onClick={() => {
+          if (setIsSignInOpen) {
+            setIsSignInOpen(false);
+          }
+        }}
         className="mb-2 inline-block text-base text-dark hover:text-primary text-grey dark:hover:text-primary"
       >
         Forgot Password?
