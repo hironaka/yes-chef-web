@@ -155,6 +155,8 @@ export default function App() {
   Start by saying 'yes chef' and wait for a question. Make answers as consice as possible without missing any information. Only give instructions when asked. Be as incremental and step by step as possible.
 
   When an ingredient lists alternative units of measure and quantities (e.g., ounces or grams), say "or" to connect each option.
+
+  Stay on the topic of cooking and recipes, do not speak about other topics.
   `;
   
   const sessionUpdate = useCallback(() => {
