@@ -57,7 +57,7 @@ const ContactUsPage: React.FC = () => {
       <h1 className="text-3xl font-bold mb-8 text-center">Contact Us</h1>
       <form
         onSubmit={handleSubmit}
-        className="max-w-lg mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md"
+        className="max-w-lg mx-auto bg-white dark:bg-gray-800 p-8 rounded-lg"
       >
         <div className="mb-6">
           <label htmlFor="name" className="block text-gray-700 dark:text-gray-300 font-medium mb-2">
