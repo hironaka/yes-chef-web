@@ -114,7 +114,7 @@ const ContactUsPage: React.FC = () => {
         <div className="text-center">
           <button
             type="submit"
-            className={`bg-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-md transition duration-300 ${
+            className={`w-full bg-primary hover:bg-opacity-90 text-white py-2 px-6 rounded-full transition duration-300 ${
               isLoading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
             disabled={isLoading}
