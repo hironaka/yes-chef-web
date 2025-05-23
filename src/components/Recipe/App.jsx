@@ -4,12 +4,14 @@ import Image from "next/image";
 import { useEffect, useRef, useState, useCallback } from "react";
 import SessionControls from "./SessionControls";
 import RecipePanel from "./RecipePanel";
+import Timer from "./Timer";
 import { generateToken } from '@/app/lib/actions';
 
 export default function App() {
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [dataChannel, setDataChannel] = useState(null);
   const [recipe, setRecipe] = useState(null);
+  const [events, setEvents] = useState([]);
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
 
@@ -79,6 +81,7 @@ export default function App() {
 
     setIsSessionActive(false);
     setDataChannel(null);
+    setEvents([]);
     peerConnection.current = null;
   }
 
@@ -121,7 +124,9 @@ export default function App() {
     if (dataChannel) {
       // Append new server events to the list
       dataChannel.addEventListener("message", (e) => {
-        console.log('Server Event:', JSON.stringify(JSON.parse(e.data), null, 2));
+        const eventData = JSON.parse(e.data);
+        console.log('Server Event:', JSON.stringify(eventData, null, 2));
+        setEvents(prevEvents => [eventData, ...prevEvents]);
       });
 
       // Set session active when the data channel is opened
@@ -165,6 +170,55 @@ export default function App() {
       session: {
         "instructions": systemInstruction,
         "temperature": 0.6,
+        "tools": [
+          {
+            type: "function",
+            name: "start_timer",
+            description: "Call this function when a user asks to start or set a timer.",
+            parameters: {
+              type: "object",
+              strict: true,
+              properties: {
+                duration: {
+                  type: "integer",
+                  description: "The duration of the timer in seconds.",
+                }
+              },
+              required: ["duration"],
+            },
+          },
+          {
+            type: "function",
+            name: "stop_timer",
+            description: "Call this function when a user asks to stop (end and reset) the current timer.",
+            parameters: {
+              type: "object",
+              strict: true,
+              properties: {},
+            },
+          },
+          {
+            type: "function",
+            name: "pause_timer",
+            description: "Call this function when a user asks to pause the current timer.",
+            parameters: {
+              type: "object",
+              strict: true,
+              properties: {},
+            },
+          },
+          {
+            type: "function",
+            name: "resume_timer",
+            description: "Call this function when a user asks to resume the paused timer.",
+            parameters: {
+              type: "object",
+              strict: true,
+              properties: {},
+            },
+          }
+        ],
+        "tool_choice": "auto",
       },
     };
   }, [systemInstruction]);
@@ -198,6 +252,15 @@ export default function App() {
           />
         </div>
       </main>
+      
+      {/* Timer positioned in bottom right */}
+      <div className="fixed bottom-4 right-4 z-50">
+        <Timer
+          isSessionActive={isSessionActive}
+          sendClientEvent={sendClientEvent}
+          events={events}
+        />
+      </div>
     </>
   );
 }
