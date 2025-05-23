@@ -161,6 +161,8 @@ export default function App() {
 
   When an ingredient lists alternative units of measure and quantities (e.g., ounces or grams), say "or" to connect each option.
 
+  If an instruction includes a duration, offer to set a timer.
+
   Stay on the topic of cooking and recipes, do not speak about other topics.
   `;
   

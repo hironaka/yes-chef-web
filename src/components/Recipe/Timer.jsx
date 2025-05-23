@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 
 export default function TimerPanel({
@@ -12,6 +12,8 @@ export default function TimerPanel({
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [endTime, setEndTime] = useState(null);
+  const [isAlarmPlaying, setIsAlarmPlaying] = useState(false);
+  const audioRef = useRef(null);
 
   const formatTime = useCallback((totalSeconds) => {
     const hours = Math.floor(totalSeconds / 3600);
@@ -21,22 +23,23 @@ export default function TimerPanel({
   }, []);
 
   const playTimerEndSound = useCallback(() => {
-    if (typeof window !== 'undefined' && (window.AudioContext || window.webkitAudioContext)) {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4 note
-      gainNode.gain.setValueAtTime(0.5, audioContext.currentTime); // Adjust volume
-      gainNode.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 1);
-
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 1);
+    if (!audioRef.current) {
+      audioRef.current = new Audio('/audio/kitchen-timer-33043.mp3');
+      audioRef.current.loop = true;
     }
+    
+    audioRef.current.play().catch(error => {
+      console.error('Error playing timer sound:', error);
+    });
+    setIsAlarmPlaying(true);
+  }, []);
+
+  const stopTimerSound = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    setIsAlarmPlaying(false);
   }, []);
 
   const handleStopTimer = useCallback((calledByMCP = false, callId = null) => {
@@ -45,6 +48,7 @@ export default function TimerPanel({
     setInitialDuration(0);
     setRemainingTime(0);
     setEndTime(null);
+    stopTimerSound();
 
     if (calledByMCP && callId) {
       sendClientEvent({
@@ -56,7 +60,7 @@ export default function TimerPanel({
         }
       });
     }
-  }, [sendClientEvent]);
+  }, [sendClientEvent, stopTimerSound]);
 
   const handleStartTimer = useCallback((durationInSeconds, callId) => {
     setInitialDuration(durationInSeconds);
@@ -138,17 +142,18 @@ export default function TimerPanel({
         const newRemaining = Math.max(0, Math.round((endTime - now) / 1000));
         setRemainingTime(newRemaining);
 
-        if (newRemaining === 0) {
+        if (newRemaining === 0 && !isAlarmPlaying) {
           playTimerEndSound();
-          handleStopTimer(false); // Timer ended naturally
-        } else {
+        }
+        
+        if (newRemaining > 0) {
           animationFrameId = requestAnimationFrame(tick);
         }
       };
       animationFrameId = requestAnimationFrame(tick);
     }
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isRunning, isPaused, endTime, playTimerEndSound, handleStopTimer]);
+  }, [isRunning, isPaused, endTime, isAlarmPlaying, playTimerEndSound]);
 
   useEffect(() => {
     if (!events || events.length === 0) return;
@@ -203,18 +208,34 @@ export default function TimerPanel({
       setInitialDuration(0);
       setRemainingTime(0);
       setEndTime(null);
+      stopTimerSound();
     }
-  }, [isSessionActive]);
+  }, [isSessionActive, stopTimerSound]);
 
-  if (initialDuration === 0 && !isRunning) {
+  if (initialDuration === 0 && !isRunning && !isAlarmPlaying) {
     return null; // Don't display if no timer was set or it has finished and reset
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-4 shadow-lg">
-      <div className="text-3xl font-bold text-gray-900 dark:text-white">
+    <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-4 shadow-lg relative">
+      {isAlarmPlaying && (
+        <button
+          onClick={handleStopTimer}
+          className="absolute top-1 right-1 w-12 h-12 text-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors text-sm font-bold"
+        >
+          ×
+        </button>
+      )}
+      <div className="text-3xl font-bold text-gray-900 dark:text-white font-mono">
         {formatTime(remainingTime)}
       </div>
+      {isAlarmPlaying && (
+        <div className="mt-3 text-center">
+          <div className="text-sm text-red-600 dark:text-red-400 font-semibold animate-pulse">
+            Timer finished! 🔔
+          </div>
+        </div>
+      )}
       {/* 
         // Manual controls can be added here for testing if needed
         {isRunning && !isPaused && <button onClick={() => handlePauseTimer()}>Pause Manually</button>}
