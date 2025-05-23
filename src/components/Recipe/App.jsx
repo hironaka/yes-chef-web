@@ -244,7 +244,7 @@ export default function App() {
             isSessionActive={isSessionActive}
           />
         </div>
-        <div className="mb-4">
+        <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-40">
           <SessionControls
             startSession={startSession}
             stopSession={stopSession}
@@ -256,7 +256,7 @@ export default function App() {
       </main>
       
       {/* Timer positioned in bottom right */}
-      <div className="fixed bottom-4 right-4 z-50">
+      <div className="fixed bottom-10 right-10 z-50">
         <Timer
           isSessionActive={isSessionActive}
           sendClientEvent={sendClientEvent}
