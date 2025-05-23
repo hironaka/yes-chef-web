@@ -212,28 +212,21 @@ export default function TimerPanel({
     }
   }, [isSessionActive, stopTimerSound]);
 
-  // if (initialDuration === 0 && !isRunning && !isAlarmPlaying) {
-  //   return null; // Don't display if no timer was set or it has finished and reset
-  // }
+  if (initialDuration === 0 && !isRunning && !isAlarmPlaying) {
+    return null; // Don't display if no timer was set or it has finished and reset
+  }
 
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-4 shadow-lg relative">
-        <button
-          onClick={handleStopTimer}
-          className="absolute top-1 right-1 w-4 h-4 text-gray-300 hover:text-black rounded-full flex items-center justify-center transition-colors text-md"
-        >
-          ×
-        </button>
+      <button
+        onClick={handleStopTimer}
+        className="absolute top-1 right-1 w-4 h-4 text-gray-300 hover:text-black rounded-full flex items-center justify-center transition-colors text-md"
+      >
+        ×
+      </button>
       <div className="text-3xl font-bold text-gray-900 dark:text-white">
         {formatTime(remainingTime)}
       </div>
-      {isAlarmPlaying && (
-        <div className="mt-3 text-center">
-          <div className="text-sm text-red-600 dark:text-red-400 font-semibold animate-pulse">
-            Timer finished! 🔔
-          </div>
-        </div>
-      )}
       {/* 
         // Manual controls can be added here for testing if needed
         {isRunning && !isPaused && <button onClick={() => handlePauseTimer()}>Pause Manually</button>}
