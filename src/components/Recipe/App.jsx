@@ -139,18 +139,65 @@ export default function App() {
   // Get the recipe from the browser extension
   useEffect(() => {
     const extensionId = 'lmakaflodkdoemdbcahofdoiihchjbim'; // Replace with your extension ID
-    if (chrome && chrome.runtime) {
-      chrome.runtime.sendMessage(extensionId, { action: 'GET_RECIPE' }, response => {
-        console.log('Response from extension:', response);
-        if (response && response.recipe) {
-          setRecipe(response.recipe);
-          console.log('Recipe set:', response.recipe);
+    const safariExtensionId = 'ai.yes-chef.Yes-Chef.Extension (6WY2A6DU5T)'; // Safari extension ID when available
+    
+    // Feature detection for browser extension APIs
+    const getBrowserRuntime = () => {
+      if (typeof chrome !== 'undefined' && chrome.runtime) {
+        return { runtime: chrome.runtime, extensionId, browserType: 'chrome' };
+      } else if (typeof safari !== 'undefined' && safari.extension) {
+        // Safari extension API (legacy)
+        return { runtime: safari.extension, extensionId: safariExtensionId, browserType: 'safari-legacy' };
+      } else if (typeof browser !== 'undefined' && browser.runtime && navigator.userAgent.includes('Safari')) {
+        // Safari with WebExtension API (Safari 14+)
+        return { runtime: browser.runtime, extensionId: safariExtensionId, browserType: 'safari-webext' };
+      }  else if (typeof browser !== 'undefined' && browser.runtime) {
+        // Firefox/WebExtension API
+        return { runtime: browser.runtime, extensionId, browserType: 'firefox' };
+      }
+      return null;
+    };
+
+    const browserAPI = getBrowserRuntime();
+    
+    if (browserAPI) {
+      const { runtime, extensionId: currentExtensionId, browserType } = browserAPI;
+      
+      try {
+        if (browserType === 'safari-legacy') {
+          // Safari legacy extension messaging
+          if (runtime.sendMessage) {
+            runtime.sendMessage('GET_RECIPE', response => {
+              console.log('Response from Safari extension:', response);
+              if (response && response.recipe) {
+                setRecipe(response.recipe);
+                console.log('Recipe set:', response.recipe);
+              } else {
+                console.error('No recipe received from Safari extension');
+              }
+            });
+          }
         } else {
-          console.error('No recipe received from extension');
+          // Chrome/Firefox/Safari WebExtension API
+          runtime.sendMessage(currentExtensionId, { action: 'GET_RECIPE' }, response => {
+            console.log(`Response from ${browserType} extension:`, response);
+            if (response && response.recipe) {
+              setRecipe(response.recipe);
+              console.log('Recipe set:', response.recipe);
+            } else {
+              console.error(`No recipe received from ${browserType} extension`);
+            }
+          });
         }
-      });
+      } catch (error) {
+        console.error('Error communicating with extension:', error);
+        // Fallback: prompt user to manually input recipe or provide alternative
+        console.log('Extension not available. Consider manual recipe input or alternative data source.');
+      }
     } else {
-      console.error('Chrome runtime not available');
+      console.error('Browser extension APIs not available');
+      // Fallback: show UI for manual recipe input
+      console.log('No extension support detected. Consider manual recipe input or alternative data source.');
     }
   }, []);
 
