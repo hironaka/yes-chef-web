@@ -139,7 +139,7 @@ export default function App() {
   // Get the recipe from the browser extension
   useEffect(() => {
     const extensionId = 'lmakaflodkdoemdbcahofdoiihchjbim'; // Replace with your extension ID
-    const safariExtensionId = 'ai.yes-chef.YesChef.Extension (6WY2A6DU5T)'; // Safari extension ID when available
+    const safariExtensionId = 'ai.yes-chef.Yes-Chef.Extension (6WY2A6DU5T)'; // Safari extension ID when available
     
     // Feature detection for browser extension APIs
     const getBrowserRuntime = () => {
