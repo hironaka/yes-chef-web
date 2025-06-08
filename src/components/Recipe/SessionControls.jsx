@@ -13,10 +13,10 @@ function SessionStopped({ startSession }) {
   }
 
   return (
-    <div className="flex items-center justify-center w-full h-full">
+    <div className="flex items-center justify-center w-full h-full bg-white rounded-full">
       <Button
         onClick={handleStartSession}
-        className={isActivating ? "text-primary bg-primary/15 hover:text-white hover:bg-primary cursor-not-allowed" : "bg-primary text-white hover:bg-primary/15 hover:text-primary"}
+        className={isActivating ? "text-primary text-sm bg-primary/15 hover:text-white hover:bg-primary cursor-not-allowed" : "bg-primary text-white text-sm hover:bg-primary/15 hover:text-primary"}
         icon={<CloudLightning height={16} />}
       >
         {isActivating ? "starting session..." : "start session"}
@@ -28,8 +28,8 @@ function SessionStopped({ startSession }) {
 function SessionActive({ stopSession }) {
 
   return (
-    <div className="flex items-center justify-center w-full h-full">
-      <Button onClick={stopSession} icon={<CloudOff height={16} />} className="text-primary bg-primary/15 hover:text-white hover:bg-primary">
+    <div className="flex items-center justify-center w-full h-full bg-white rounded-full">
+      <Button onClick={stopSession} icon={<CloudOff height={16} />} className="text-primary text-sm bg-primary/15 hover:text-white hover:bg-primary">
         disconnect
       </Button>
     </div>
