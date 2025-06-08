@@ -283,7 +283,7 @@ export default function App() {
   return (
     <>
       <main className="flex flex-col items-center min-h-screen pt-20 px-4">
-        <div className="w-full max-w-4xl p-4">
+        <div className="w-full max-w-4xl pb-20">
           <RecipePanel
             recipe={recipe}
             sendClientEvent={sendClientEvent}

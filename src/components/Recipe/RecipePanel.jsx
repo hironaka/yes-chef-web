@@ -37,7 +37,7 @@ export default function RecipePanel({
           <div> {/* Removed space-y-4 */}
             <h3 className="text-lg font-semibold text-center mb-6">{decodeHtmlEntities(recipe.name)}</h3>
             {/* Add Grid Container with conditional height/overflow */}
-            <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 transition-max-height duration-500 ease-in-out ${isExpanded ? 'max-h-[5000px]' : 'max-h-80 overflow-hidden'}`}>
+            <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 transition-max-height duration-500 ease-in-out ${isExpanded ? 'max-h-[5000px]' : 'max-h-60 overflow-hidden'}`}>
 
             <div>
               <h4 className="font-medium mb-2 text-base">Ingredients</h4>
