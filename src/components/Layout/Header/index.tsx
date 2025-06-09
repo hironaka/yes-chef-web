@@ -14,6 +14,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 const Header = () => {
   const { data: session, status } = useSession(); // Get session status
   const pathUrl = usePathname();
+  const isRecipePage = pathUrl === '/recipe';
   const { theme, setTheme } = useTheme();
 
   const [navbarOpen, setNavbarOpen] = useState(false);
@@ -95,17 +96,19 @@ const Header = () => {
               </>
             ) : (
               <>
-                {/* Unauthenticated: Show Sign In / Sign Up */}
-                <Link
-                  href="#"
-                  className="hidden lg:block text-primary bg-primary/15 hover:text-white hover:bg-primary font-medium text-lg py-4 px-8 rounded-full"
-                  onClick={(e) => {
-                    e.preventDefault(); // Prevent navigation
-                    setIsSignInOpen(true);
-                  }}
-                >
-                  Sign In
-                </Link>
+                {/* Unauthenticated: Show Sign In / Sign Up (hidden on recipe page) */}
+                {!isRecipePage && (
+                  <Link
+                    href="#"
+                    className="hidden lg:block text-primary bg-primary/15 hover:text-white hover:bg-primary font-medium text-lg py-4 px-8 rounded-full"
+                    onClick={(e) => {
+                      e.preventDefault(); // Prevent navigation
+                      setIsSignInOpen(true);
+                    }}
+                  >
+                    Sign In
+                  </Link>
+                )}
                 {isSignInOpen && (
                   <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div
@@ -126,16 +129,18 @@ const Header = () => {
                     </div>
                   </div>
                 )}
-                <Link
-                  href="#"
-                  className="hidden lg:block bg-primary text-white hover:bg-primary/15 hover:text-primary font-medium text-lg py-4 px-8 rounded-full "
-                  onClick={(e) => {
-                     e.preventDefault(); // Prevent navigation
-                    setIsSignUpOpen(true);
-                  }}
-                >
-                  Sign Up
-                </Link>
+                {!isRecipePage && (
+                  <Link
+                    href="#"
+                    className="hidden lg:block bg-primary text-white hover:bg-primary/15 hover:text-primary font-medium text-lg py-4 px-8 rounded-full "
+                    onClick={(e) => {
+                       e.preventDefault(); // Prevent navigation
+                      setIsSignUpOpen(true);
+                    }}
+                  >
+                    Sign Up
+                  </Link>
+                )}
                 {isSignUpOpen && (
                   <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div
@@ -212,29 +217,33 @@ const Header = () => {
                 </>
               ) : (
                 <>
-                  {/* Unauthenticated: Show Sign In / Sign Up */}
-                  <Link
-                    href="#"
-                    className="bg-transparent border border-primary text-primary px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white"
-                    onClick={(e) => {
-                      e.preventDefault(); // Prevent navigation
-                      setIsSignInOpen(true);
-                      setNavbarOpen(false);
-                    }}
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="#"
-                    className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                    onClick={(e) => {
-                      e.preventDefault(); // Prevent navigation
-                      setIsSignUpOpen(true);
-                      setNavbarOpen(false);
-                    }}
-                  >
-                    Sign Up
-                  </Link>
+                  {/* Unauthenticated: Show Sign In / Sign Up (hidden on recipe page) */}
+                  {!isRecipePage && (
+                    <>
+                      <Link
+                        href="#"
+                        className="bg-transparent border border-primary text-primary px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white"
+                        onClick={(e) => {
+                          e.preventDefault(); // Prevent navigation
+                          setIsSignInOpen(true);
+                          setNavbarOpen(false);
+                        }}
+                      >
+                        Sign In
+                      </Link>
+                      <Link
+                        href="#"
+                        className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                        onClick={(e) => {
+                          e.preventDefault(); // Prevent navigation
+                          setIsSignUpOpen(true);
+                          setNavbarOpen(false);
+                        }}
+                      >
+                        Sign Up
+                      </Link>
+                    </>
+                  )}
                 </>
               )}
             </div>
