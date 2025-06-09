@@ -224,7 +224,7 @@ export default function TimerPanel({
       >
         ×
       </button>
-      <div className="text-3xl font-bold text-gray-900 dark:text-white">
+      <div className="text-sm font-bold text-gray-900 dark:text-white">
         {formatTime(remainingTime)}
       </div>
       {/* 
