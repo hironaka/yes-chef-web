@@ -6,12 +6,14 @@ import SessionControls from "./SessionControls";
 import RecipePanel from "./RecipePanel";
 import Timer from "./Timer";
 import { generateToken } from '@/app/lib/actions';
+import { useWakeLock } from "@/hooks/useWakeLock";
 
 export default function App() {
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [dataChannel, setDataChannel] = useState(null);
   const [recipe, setRecipe] = useState(null);
   const [events, setEvents] = useState([]);
+  const { isSupported } = useWakeLock(isSessionActive);
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
 
@@ -208,7 +210,7 @@ export default function App() {
 
   When an ingredient lists alternative units of measure and quantities (e.g., ounces or grams), say "or" to connect each option.
 
-  If an instruction includes a duration, offer to set a timer.
+  If an instruction includes a specific cooking duration, and in no other circumstance, offer to set a timer.
 
   Stay on the topic of cooking and recipes, do not speak about other topics.
   `;
