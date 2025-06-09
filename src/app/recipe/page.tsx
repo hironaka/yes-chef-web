@@ -1,14 +1,15 @@
+"use client";
 import React from "react";
 import App from "@/components/Recipe/App";
-import { Metadata } from "next";
-export const metadata: Metadata = {
-  title: "Yes Chef",
-};
+import { useSession } from "next-auth/react";
+import AuthGuard from "@/components/AuthGuard";
 
 export default function Recipe() {
   return (
     <main>
-      <App />
+      <AuthGuard>
+        <App />
+      </AuthGuard>
     </main>
   );
 }
