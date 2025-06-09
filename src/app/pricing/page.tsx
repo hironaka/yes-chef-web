@@ -14,7 +14,7 @@ export default function PricingPage() {
             <li>View recipes instantly in a popup</li>
             <li>Works with any recipe website</li>
           </ul>
-          <Link href="https://chromewebstore.google.com/">
+          <Link href="https://chromewebstore.google.com/detail/hpmfopnhhijgibfmdngonlnafldlngac?utm_source=item-share-cb">
             <button className="w-full bg-primary text-white py-2 px-4 rounded-full hover:bg-opacity-90 transition duration-200">
               Get Started
             </button>
