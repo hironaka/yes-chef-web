@@ -12,7 +12,7 @@ if (!project) {
 
 const vertexAI = new VertexAI({ project: project, location: location });
 
-const modelName = 'gemini-2.0-flash-lite'; // Use appropriate Vertex AI model name
+const modelName = 'gemini-2.0-flash'; // Use appropriate Vertex AI model name
 
 const generativeModel = vertexAI.getGenerativeModel({
   model: modelName,
@@ -43,16 +43,16 @@ export async function POST(request: Request) {
 
     // System instruction integrated into the user message structure for Vertex AI
     const systemPromptContent = `
-You are an expert recipe extractor. Analyze the provided text content from a webpage.
-Your task is to determine if the text contains a food recipe.
+You are an expert recipe extractor. Analyze the provided content from a webpage.
+Your task is to determine if the content contains a food recipe.
 - If a food recipe is found, extract its details (name, ingredients, instructions, prepTime, cookTime, recipeYield, etc.) and format them STRICTLY as a JSON object conforming to the schema.org/Recipe standard (https://schema.org/Recipe). Your response MUST contain ONLY the valid JSON object, with no extra text, explanations, or markdown formatting.
-- If no food recipe is found in the text, your response MUST be EXACTLY the following JSON object: {"recipeFound": false}
+- If no food recipe is found, your response MUST be EXACTLY the following JSON object: {"recipeFound": false}
 Do not include any introductory phrases like "Here is the JSON:" or explanations.
 `;
 
      const userMessage = {
         role: 'user',
-        parts: [{ text: `${systemPromptContent}\n\nHere is the text content:\n\n${textContent}` }],
+        parts: [{ text: `${systemPromptContent}\n\nHere is the content:\n\n${textContent}` }],
     };
 
     // Construct the request for Vertex AI
@@ -61,6 +61,7 @@ Do not include any introductory phrases like "Here is the JSON:" or explanations
         generationConfig: {
             responseMimeType: "application/json",
             temperature: 0.2,
+            tools: [{urlContext: {}}, {googleSearch: {}}],
         },
         safetySettings: [
             { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
