@@ -288,12 +288,14 @@ export default function App() {
         <div className="w-full max-w-4xl pb-20">
           <RecipePanel
             recipe={recipe}
+            setRecipe={setRecipe}
             sendClientEvent={sendClientEvent}
             sendTextMessage={sendTextMessage}
             isSessionActive={isSessionActive}
           />
         </div>
-        <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-40">
+        {recipe && (
+          <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-40">
           <SessionControls
             startSession={startSession}
             stopSession={stopSession}
@@ -301,7 +303,7 @@ export default function App() {
             sendTextMessage={sendTextMessage}
             isSessionActive={isSessionActive}
           />
-        </div>
+        </div>)}
       </main>
       
       {/* Timer positioned in bottom right */}

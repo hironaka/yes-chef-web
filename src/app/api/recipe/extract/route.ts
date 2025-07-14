@@ -61,7 +61,6 @@ Do not include any introductory phrases like "Here is the JSON:" or explanations
         generationConfig: {
             responseMimeType: "application/json",
             temperature: 0.2,
-            tools: [{urlContext: {}}, {googleSearch: {}}],
         },
         safetySettings: [
             { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },

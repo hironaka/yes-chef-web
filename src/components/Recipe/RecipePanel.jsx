@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import Image from 'next/image';
+import EmptyRecipe from "./EmptyRecipe";
+
 // Function to decode HTML entities safely
 function decodeHtmlEntities(text) {
   // Check if running in a browser environment and text is valid
@@ -21,6 +23,7 @@ export default function RecipePanel({
   isSessionActive,
   sendClientEvent,
   events,
+  setRecipe
 }) {
   useEffect(() => {
     if (recipe) {
@@ -104,7 +107,7 @@ export default function RecipePanel({
             </div> {/* Close Grid Container */}
           </div>
         ) : (
-          <p className="text-sm">No recipe loaded</p>
+          <EmptyRecipe setRecipe={setRecipe} />
         )}
       </div>
     </section>
