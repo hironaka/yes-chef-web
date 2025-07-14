@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import { Chrome } from 'react-feather';
 
 export default function EmptyRecipe({ setRecipe }) {
   const [url, setUrl] = useState('');
@@ -65,6 +66,22 @@ export default function EmptyRecipe({ setRecipe }) {
         </button>
       </form>
       {error && <p className="text-red-500 mt-4">{error}</p>}
+
+      <div className="flex items-center w-full max-w-md mx-auto my-6">
+        <div className="flex-grow border-t border-gray-300"></div>
+        <span className="flex-shrink mx-4 text-gray-500 text-sm">OR</span>
+        <div className="flex-grow border-t border-gray-300"></div>
+      </div>
+
+      <a
+        href="https://chromewebstore.google.com/detail/hpmfopnhhijgibfmdngonlnafldlngac?utm_source=item-share-cb"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 justify-center bg-gray-100 text-gray-700 py-2 px-6 rounded-full hover:bg-gray-200 transition-colors"
+      >
+        <Chrome size={18} />
+        Install Chrome Extension
+      </a>
     </div>
   );
 }
