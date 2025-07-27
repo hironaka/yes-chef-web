@@ -13,6 +13,7 @@ export default function App() {
   const [dataChannel, setDataChannel] = useState(null);
   const [recipe, setRecipe] = useState(null);
   const [events, setEvents] = useState([]);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const { isSupported } = useWakeLock(isSessionActive);
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
@@ -203,6 +204,17 @@ export default function App() {
     }
   }, []);
 
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsSmallScreen(window.innerWidth < 640);
+    };
+
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
   const systemInstruction = `
   You are a helpful sous-chef working as an assistant to a chef.
 
@@ -295,25 +307,37 @@ export default function App() {
           />
         </div>
         {recipe && (
-          <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-40">
-          <SessionControls
-            startSession={startSession}
-            stopSession={stopSession}
-            sendClientEvent={sendClientEvent}
-            sendTextMessage={sendTextMessage}
-            isSessionActive={isSessionActive}
-          />
-        </div>)}
+          <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-40 flex flex-col items-center">
+            {isSmallScreen && (
+              <div className="mb-4">
+                <Timer
+                  isSessionActive={isSessionActive}
+                  sendClientEvent={sendClientEvent}
+                  events={events}
+                />
+              </div>
+            )}
+            <SessionControls
+              startSession={startSession}
+              stopSession={stopSession}
+              sendClientEvent={sendClientEvent}
+              sendTextMessage={sendTextMessage}
+              isSessionActive={isSessionActive}
+            />
+          </div>
+        )}
       </main>
-      
-      {/* Timer positioned in bottom right */}
-      <div className="fixed bottom-10 right-10 z-50">
-        <Timer
-          isSessionActive={isSessionActive}
-          sendClientEvent={sendClientEvent}
-          events={events}
-        />
-      </div>
+
+      {/* Timer positioned in bottom right on larger screens */}
+      {!isSmallScreen && (
+        <div className="fixed bottom-10 right-10 z-50">
+          <Timer
+            isSessionActive={isSessionActive}
+            sendClientEvent={sendClientEvent}
+            events={events}
+          />
+        </div>
+      )}
     </>
   );
 }
