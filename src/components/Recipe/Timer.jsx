@@ -1,18 +1,25 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-
+import React, { useEffect, useCallback, useRef } from 'react';
+import useTimerStore from '../../stores/timerStore';
 
 export default function TimerPanel({
   isSessionActive,
   sendClientEvent,
   events,
 }) {
-
-  const [initialDuration, setInitialDuration] = useState(0);
-  const [remainingTime, setRemainingTime] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [endTime, setEndTime] = useState(null);
-  const [isAlarmPlaying, setIsAlarmPlaying] = useState(false);
+  const {
+    initialDuration,
+    remainingTime,
+    isRunning,
+    isPaused,
+    endTime,
+    isAlarmPlaying,
+    setTimer,
+    stopTimer,
+    pauseTimer,
+    resumeTimer,
+    setRemainingTime,
+    setIsAlarmPlaying,
+  } = useTimerStore();
   const audioRef = useRef(null);
 
   const formatTime = useCallback((totalSeconds) => {
@@ -32,7 +39,7 @@ export default function TimerPanel({
       console.error('Error playing timer sound:', error);
     });
     setIsAlarmPlaying(true);
-  }, []);
+  }, [setIsAlarmPlaying]);
 
   const stopTimerSound = useCallback(() => {
     if (audioRef.current) {
@@ -40,14 +47,10 @@ export default function TimerPanel({
       audioRef.current.currentTime = 0;
     }
     setIsAlarmPlaying(false);
-  }, []);
+  }, [setIsAlarmPlaying]);
 
   const handleStopTimer = useCallback((calledByMCP = false, callId = null) => {
-    setIsRunning(false);
-    setIsPaused(false);
-    setInitialDuration(0);
-    setRemainingTime(0);
-    setEndTime(null);
+    stopTimer();
     stopTimerSound();
 
     if (calledByMCP && callId) {
@@ -60,14 +63,10 @@ export default function TimerPanel({
         }
       });
     }
-  }, [sendClientEvent, stopTimerSound]);
+  }, [sendClientEvent, stopTimer, stopTimerSound]);
 
   const handleStartTimer = useCallback((durationInSeconds, callId) => {
-    setInitialDuration(durationInSeconds);
-    setRemainingTime(durationInSeconds);
-    setEndTime(Date.now() + durationInSeconds * 1000);
-    setIsRunning(true);
-    setIsPaused(false);
+    setTimer(durationInSeconds);
 
     if (callId) {
         sendClientEvent({
@@ -79,12 +78,11 @@ export default function TimerPanel({
             }
         });
     }
-  }, [sendClientEvent]);
+  }, [sendClientEvent, setTimer]);
 
   const handlePauseTimer = useCallback((callId = null) => {
     if (isRunning && !isPaused) {
-      setIsPaused(true);
-      // The timer loop will stop due to isPaused being true.
+      pauseTimer();
       if (callId) {
         sendClientEvent({
           type: "conversation.item.create",
@@ -105,13 +103,11 @@ export default function TimerPanel({
             }
           });
     }
-  }, [isRunning, isPaused, sendClientEvent]);
+  }, [isRunning, isPaused, sendClientEvent, pauseTimer]);
 
   const handleResumeTimer = useCallback((callId = null) => {
     if (isRunning && isPaused) {
-      setEndTime(Date.now() + remainingTime * 1000); // Recalculate endTime
-      setIsPaused(false);
-      // The timer loop will restart.
+      resumeTimer();
       if (callId) {
         sendClientEvent({
           type: "conversation.item.create",
@@ -132,7 +128,7 @@ export default function TimerPanel({
             }
           });
     }
-  }, [isRunning, isPaused, remainingTime, sendClientEvent]);
+  }, [isRunning, isPaused, sendClientEvent, resumeTimer]);
 
   useEffect(() => {
     let animationFrameId;
@@ -153,7 +149,7 @@ export default function TimerPanel({
       animationFrameId = requestAnimationFrame(tick);
     }
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isRunning, isPaused, endTime, isAlarmPlaying, playTimerEndSound]);
+  }, [isRunning, isPaused, endTime, isAlarmPlaying, playTimerEndSound, setRemainingTime]);
 
   useEffect(() => {
     if (!events || events.length === 0) return;
@@ -166,7 +162,6 @@ export default function TimerPanel({
       mostRecentEvent.response.output.forEach((output) => {
         if (output.type === "function_call") {
           const { name, arguments: args, id: callId } = output;
-          console.log('Function call detected:', { name, args, callId });
           
           if (name === "start_timer") {
             let duration = 0;
@@ -203,14 +198,10 @@ export default function TimerPanel({
 
   useEffect(() => {
     if (!isSessionActive) {
-      setIsRunning(false);
-      setIsPaused(false);
-      setInitialDuration(0);
-      setRemainingTime(0);
-      setEndTime(null);
+      stopTimer();
       stopTimerSound();
     }
-  }, [isSessionActive, stopTimerSound]);
+  }, [isSessionActive, stopTimer, stopTimerSound]);
 
   if (initialDuration === 0 && !isRunning && !isAlarmPlaying) {
     return null; // Don't display if no timer was set or it has finished and reset
@@ -219,7 +210,7 @@ export default function TimerPanel({
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg p-4 shadow-lg relative">
       <button
-        onClick={handleStopTimer}
+        onClick={() => handleStopTimer()}
         className="absolute top-1 right-1 w-4 h-4 text-gray-300 hover:text-black rounded-full flex items-center justify-center transition-colors text-md"
       >
         ×
@@ -227,7 +218,7 @@ export default function TimerPanel({
       <div className="text-sm font-bold text-gray-900 dark:text-white">
         {formatTime(remainingTime)}
       </div>
-      {/* 
+      {/*
         // Manual controls can be added here for testing if needed
         {isRunning && !isPaused && <button onClick={() => handlePauseTimer()}>Pause Manually</button>}
         {isRunning && isPaused && <button onClick={() => handleResumeTimer()}>Resume Manually</button>}
