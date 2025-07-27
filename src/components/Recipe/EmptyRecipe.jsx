@@ -47,11 +47,55 @@ export default function EmptyRecipe({ setRecipe }) {
     }
   };
 
-  const handleImageUpload = (e) => {
+  const fileToGenerativePart = async (file) => {
+    const base64EncodedImage = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result.split(',')[1]);
+      reader.readAsDataURL(file);
+    });
+
+    return {
+      inlineData: {
+        data: base64EncodedImage,
+        mimeType: file.type,
+      },
+    };
+  }
+
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      // Handle the image upload logic here
-      console.log('Selected file:', file.name);
+    if (!file) return;
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const imageContent = await fileToGenerativePart(file);
+      
+      const response = await fetch('/api/recipe/extract', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ imageContent }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to extract recipe from image.');
+      }
+
+      const recipeData = await response.json();
+
+      if (recipeData.recipeFound === false) {
+        throw new Error('No recipe found in the uploaded image.');
+      }
+
+      setRecipe(recipeData);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -127,8 +171,9 @@ export default function EmptyRecipe({ setRecipe }) {
           <button
             onClick={triggerFileUpload}
             className="bg-primary text-white py-2 px-6 rounded-full hover:bg-primary/90 w-full mt-auto"
+            disabled={isLoading}
           >
-            Upload Image
+            {isLoading ? 'Extracting...' : 'Upload Image'}
           </button>
         </div>
       </div>

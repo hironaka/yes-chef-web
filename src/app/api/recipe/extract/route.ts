@@ -23,10 +23,10 @@ const generativeModel = vertexAI.getGenerativeModel({
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { textContent } = body;
+    const { textContent, imageContent } = body;
 
-    if (!textContent || typeof textContent !== 'string') {
-      return NextResponse.json({ error: 'Missing or invalid textContent in request body' }, { status: 400 });
+    if ((!textContent || typeof textContent !== 'string') && !imageContent) {
+      return NextResponse.json({ error: 'Missing or invalid textContent or imageContent in request body' }, { status: 400 });
     }
 
     // Check for necessary environment variables for Vertex AI
@@ -43,16 +43,25 @@ export async function POST(request: Request) {
 
     // System instruction integrated into the user message structure for Vertex AI
     const systemPromptContent = `
-You are an expert recipe extractor. Analyze the provided content from a webpage.
+You are an expert recipe extractor. Analyze the provided content.
 Your task is to determine if the content contains a food recipe.
 - If a food recipe is found, extract its details (name, ingredients, instructions, prepTime, cookTime, recipeYield, etc.) and format them STRICTLY as a JSON object conforming to the schema.org/Recipe standard (https://schema.org/Recipe). Your response MUST contain ONLY the valid JSON object, with no extra text, explanations, or markdown formatting.
 - If no food recipe is found, your response MUST be EXACTLY the following JSON object: {"recipeFound": false}
 Do not include any introductory phrases like "Here is the JSON:" or explanations.
 `;
+    const parts = [];
+    if (imageContent) {
+      parts.push(imageContent);
+    }
+    if (textContent) {
+      parts.push({ text: textContent });
+    }
+    
+    parts.push({ text: systemPromptContent });
 
-     const userMessage = {
+    const userMessage = {
         role: 'user',
-        parts: [{ text: `${systemPromptContent}\n\nHere is the content:\n\n${textContent}` }],
+        parts: parts,
     };
 
     // Construct the request for Vertex AI
