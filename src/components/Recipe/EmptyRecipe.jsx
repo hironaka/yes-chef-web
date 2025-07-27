@@ -29,7 +29,8 @@ export default function EmptyRecipe({ setRecipe }) {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to fetch recipe.');
+        console.log('Error response:', errorData);
+        throw new Error('Failed to fetch recipe.');
       }
 
       const recipeData = await response.json();
@@ -86,7 +87,6 @@ export default function EmptyRecipe({ setRecipe }) {
               {isLoading ? 'Extracting...' : 'Import Recipe'}
             </button>
           </form>
-          {error && <p className="text-red-500 mt-4">{error}</p>}
         </div>
 
         {/* Section 2: Get Chrome Extension */}
