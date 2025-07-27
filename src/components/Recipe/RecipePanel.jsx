@@ -36,7 +36,26 @@ export default function RecipePanel({
     <section className="w-full flex flex-col gap-4"> {/* Removed h-full */}
       <div className="bg-gray-50 rounded-md p-4 overflow-y-auto"> {/* Removed h-full */}
         {recipe ? (
-          <div> {/* Removed space-y-4 */}
+          <div className="relative"> {/* Removed space-y-4 */}
+            <button
+              onClick={() => setRecipe(null)}
+              className="absolute top-0 right-0 p-1.5 text-gray-400 hover:text-gray-600"
+              aria-label="Close recipe"
+            >
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
             <h3 className="text-lg font-semibold text-center mb-6">{decodeHtmlEntities(recipe.name)}</h3>
             {/* Add Grid Container with conditional height/overflow */}
             <div className={`grid grid-cols-1 md:grid-cols-2 gap-8 max-h-[45vh] overflow-y-auto`}>
