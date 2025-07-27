@@ -122,7 +122,7 @@ export default function EmptyRecipe({ setRecipe }) {
             ref={fileInputRef}
             onChange={handleImageUpload}
             className="hidden"
-            accept="image/*"
+            accept="image/png, image/jpeg, image/webp"
           />
           <button
             onClick={triggerFileUpload}
