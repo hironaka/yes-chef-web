@@ -112,7 +112,7 @@ export default function EmptyRecipe({ setRecipe }) {
           <LinkIcon size={48} className="mb-4 text-primary" />
           <h2 className="text-2xl font-semibold mb-2">Paste Recipe Url</h2>
           <p className="text-sm text-gray-600 mb-4 flex-grow">
-            Paste a recipe URL from any website to instantly import the recipe into your Recipe Assistant. This method is ideal for quickly adding recipes from your favorite food blogs or recipe websites.
+            Paste a recipe URL from any website to instantly import the recipe into your cooking assistant. This method is ideal for quickly adding recipes from your favorite food blogs or recipe websites.
           </p>
           <form onSubmit={handleUrlSubmit} className="w-full flex flex-col items-center gap-4 mt-auto">
             <input
@@ -159,7 +159,7 @@ export default function EmptyRecipe({ setRecipe }) {
           <UploadCloud size={48} className="mb-4 text-primary" />
           <h2 className="text-2xl font-semibold mb-2">Upload Recipe Image</h2>
           <p className="text-sm text-gray-600 mb-4 flex-grow">
-            Upload an image of a recipe from a cookbook, magazine, or handwritten note. Our system will automatically extract the recipe details, allowing using our cooking assistant to with your favorite recipes from any source.
+            Upload an image of a recipe from a cookbook, magazine, or handwritten note. Our system will automatically extract the recipe details, so you can use our cooking assistant to with recipes from any source.
           </p>
           <input
             type="file"
