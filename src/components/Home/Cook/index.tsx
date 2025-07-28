@@ -19,7 +19,7 @@ const Cook = () => {
                         <h2 className="text-3xl lg:text-5xl font-semibold text-black dark:text-white text-center md:text-left">
                         Recipes without the reading.
                         </h2>
-                        <p className='text-black/50 dark:text-white/50 md:text-lg font-normal mb-10 text-center md:text-left mt-6'>No more squinting at screens with messy hands! Yes Chef cooking assistant turns any online recipe into a hands-free, voice-guided experience. Just select your recipe, and let AI walk you through step by step—so you can focus on cooking, not reading.</p>
+                        <p className='text-black/50 dark:text-white/50 md:text-lg font-normal mb-10 text-center md:text-left mt-6'>No more squinting at screens with messy hands! Yes Chef Recipe Assistant turns any online recipe into a hands-free, voice-guided experience. Just select your recipe, and let AI walk you through step by step—so you can focus on cooking, not reading.</p>
                         <p className='text-black/50 dark:text-white/50 md:text-lg font-normal mb-10 text-center md:text-left'>Need to pause? Just ask. Wondering “What&apos;s the next step?” or “What can I substitute for this ingredient?”—our AI has the answers. Whether you&apos;re chopping, stirring, or adjusting on the fly, your voice assistant is there to help.</p>
                     </div>
                 </div>
