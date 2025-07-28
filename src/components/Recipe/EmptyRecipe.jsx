@@ -138,7 +138,7 @@ export default function EmptyRecipe({ setRecipe }) {
           <Chrome size={48} className="mb-4 text-primary" />
           <h2 className="text-2xl font-semibold mb-2">Get Chrome Extension</h2>
           <p className="text-sm text-gray-600 mb-4 flex-grow">
-            Install our Chrome extension to easily save recipes from any webpage with a single click. This extension integrates seamlessly with your browser, making it effortless to collect and organize recipes as you browse the web.
+            Install our Chrome extension to start cooking recipes from any webpage with a single click. This extension integrates seamlessly with your browser, making it effortless to use our cooking assistant with recipes you find on the web.
           </p>
           <a
             href="https://chromewebstore.google.com/detail/hpmfopnhhijgibfmdngonlnafldlngac?utm_source=item-share-cb"
@@ -159,7 +159,7 @@ export default function EmptyRecipe({ setRecipe }) {
           <UploadCloud size={48} className="mb-4 text-primary" />
           <h2 className="text-2xl font-semibold mb-2">Upload Recipe Image</h2>
           <p className="text-sm text-gray-600 mb-4 flex-grow">
-            Upload an image of a recipe from a cookbook, magazine, or handwritten note. Our system will automatically extract the recipe details, allowing you to digitize and save your favorite recipes from any source.
+            Upload an image of a recipe from a cookbook, magazine, or handwritten note. Our system will automatically extract the recipe details, allowing using our cooking assistant to with your favorite recipes from any source.
           </p>
           <input
             type="file"
