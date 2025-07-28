@@ -2,15 +2,13 @@ import { useState } from "react";
 import { CloudLightning, CloudOff, MessageSquare } from "react-feather";
 import Button from "./Button";
 
-function SessionStopped({ startSession, authStatus }) {
+function SessionStopped({ startSession }) {
   const [isActivating, setIsActivating] = useState(false);
 
   function handleStartSession() {
     if (isActivating) return;
 
-    if (authStatus === 'authenticated') {
-      setIsActivating(true);
-    }
+    setIsActivating(true);
     startSession();
   }
 
@@ -45,7 +43,6 @@ export default function SessionControls({
   sendTextMessage,
   serverEvents,
   isSessionActive,
-  authStatus,
 }) {
   return (
     <div className="flex gap-4 h-full">
@@ -56,7 +53,7 @@ export default function SessionControls({
           serverEvents={serverEvents}
         />
       ) : (
-        <SessionStopped startSession={startSession} authStatus={authStatus} />
+        <SessionStopped startSession={startSession} />
       )}
     </div>
   );

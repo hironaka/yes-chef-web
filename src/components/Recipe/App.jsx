@@ -2,66 +2,23 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState, useCallback } from "react";
-import { useSession } from "next-auth/react";
 import SessionControls from "./SessionControls";
 import RecipePanel from "./RecipePanel";
 import Timer from "./Timer";
 import { generateToken } from '@/app/lib/actions';
 import { useWakeLock } from "@/hooks/useWakeLock";
-import Signin from "@/components/Auth/SignIn";
-import SignUp from "@/components/Auth/SignUp";
-import { Icon } from "@iconify/react/dist/iconify.js";
 
 export default function App() {
-  const { data: session, status } = useSession();
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [dataChannel, setDataChannel] = useState(null);
   const [recipe, setRecipe] = useState(null);
   const [events, setEvents] = useState([]);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
-  const [isSignInOpen, setIsSignInOpen] = useState(false);
-  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const { isSupported } = useWakeLock(isSessionActive);
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
-  const signInRef = useRef(null);
-  const signUpRef = useRef(null);
-
-  const handleClickOutside = useCallback((event) => {
-    if (
-      signInRef.current &&
-      !signInRef.current.contains(event.target)
-    ) {
-      setIsSignInOpen(false);
-    }
-    if (
-      signUpRef.current &&
-      !signUpRef.current.contains(event.target)
-    ) {
-      setIsSignUpOpen(false);
-    }
-  }, [setIsSignInOpen, setIsSignUpOpen]);
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [handleClickOutside]);
-
-  useEffect(() => {
-    if (isSignInOpen || isSignUpOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-  }, [isSignInOpen, isSignUpOpen]);
 
   async function startSession() {
-    if (status !== 'authenticated') {
-      setIsSignUpOpen(true);
-      return;
-    }
     // Get an ephemeral key from the Fastify server
     const tokenResponse = await generateToken();
     console.log(tokenResponse);
@@ -366,7 +323,6 @@ export default function App() {
               sendClientEvent={sendClientEvent}
               sendTextMessage={sendTextMessage}
               isSessionActive={isSessionActive}
-              authStatus={status}
             />
           </div>
         )}
@@ -380,46 +336,6 @@ export default function App() {
             sendClientEvent={sendClientEvent}
             events={events}
           />
-        </div>
-      )}
-      {isSignInOpen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div
-            ref={signInRef}
-            className="relative mx-auto w-full max-w-md overflow-hidden rounded-lg px-8 pt-14 pb-8 text-center bg-white dark:bg-gray-600 bg-opacity-90 backdrop-blur-md"
-          >
-            <button
-              onClick={() => setIsSignInOpen(false)}
-              className="absolute top-0 right-0 mr-8 mt-8 dark:invert"
-              aria-label="Close Sign In Modal"
-            >
-              <Icon
-                icon="tabler:currency-xrp"
-                className="text-black hover:text-primary text-24 inline-block me-2"
-              />
-            </button>
-            <Signin setIsSignInOpen={setIsSignInOpen} setIsSignUpOpen={setIsSignUpOpen} />
-          </div>
-        </div>
-      )}
-      {isSignUpOpen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div
-            ref={signUpRef}
-            className="relative mx-auto w-full max-w-md overflow-hidden rounded-lg bg-dark_grey bg-opacity-90 backdrop-blur-md px-8 pt-14 pb-8 text-center"
-          >
-            <button
-              onClick={() => setIsSignUpOpen(false)}
-              className="absolute top-0 right-0 mr-8 mt-8 dark:invert"
-              aria-label="Close Sign Up Modal"
-            >
-              <Icon
-                icon="tabler:currency-xrp"
-                className="text-white hover:text-primary text-24 inline-block me-2"
-              />
-            </button>
-            <SignUp setIsSignInOpen={setIsSignInOpen} setIsSignUpOpen={setIsSignUpOpen} />
-          </div>
         </div>
       )}
     </>
