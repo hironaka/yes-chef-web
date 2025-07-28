@@ -112,7 +112,7 @@ export default function EmptyRecipe({ setRecipe }) {
           <LinkIcon size={48} className="mb-4 text-primary" />
           <h2 className="text-2xl font-semibold mb-2">From a URL</h2>
           <p className="text-sm text-gray-600 mb-4 flex-grow">
-            Paste a URL from any website to import a recipe.
+            Paste a URL from any website to start cooking with our voice assistant.
           </p>
           <form onSubmit={handleUrlSubmit} className="w-full flex flex-col items-center gap-4 mt-auto">
             <input
@@ -136,9 +136,9 @@ export default function EmptyRecipe({ setRecipe }) {
         {/* Section 2: Get Chrome Extension */}
         <div className="p-6 rounded-lg shadow-lg flex flex-col items-center">
           <Chrome size={48} className="mb-4 text-primary" />
-          <h2 className="text-2xl font-semibold mb-2">With our Extension</h2>
+          <h2 className="text-2xl font-semibold mb-2">Use our Extension</h2>
           <p className="text-sm text-gray-600 mb-4 flex-grow">
-            Install our Chrome extension to import recipes with a single click.
+            Use our Chrome extension to convert recipes into a voice-guided experience with one click.
           </p>
           <a
             href="https://chromewebstore.google.com/detail/hpmfopnhhijgibfmdngonlnafldlngac?utm_source=item-share-cb"
@@ -159,7 +159,7 @@ export default function EmptyRecipe({ setRecipe }) {
           <UploadCloud size={48} className="mb-4 text-primary" />
           <h2 className="text-2xl font-semibold mb-2">From an Image</h2>
           <p className="text-sm text-gray-600 mb-4 flex-grow">
-            Upload a photo of a recipe from a cookbook, magazine, or even a handwritten note.
+            Upload an image of a recipe from a cookbook, magazine, or even a handwritten note, and our voice assistant will guide you through it.
           </p>
           <input
             type="file"
