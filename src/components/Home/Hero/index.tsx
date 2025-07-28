@@ -15,7 +15,7 @@ const Hero = () => {
                         </h1>
                         <p className='text-black/55 dark:text-white/50 lg:text-lg font-normal mb-10 lg:text-start text-center'>Convert any online recipe into a voice-guided experience. No more messy screens—just smooth cooking.</p>
                         <div className='flex gap-4 items-center justify-center lg:justify-start'>
-                            <Link href='https://chromewebstore.google.com/detail/hpmfopnhhijgibfmdngonlnafldlngac?utm_source=item-share-cb' className='text-xl flex-1 font-medium rounded-full text-white py-5 px-6 bg-primary hover:text-primary lg:px-14 border border-primary hover:bg-transparent text-center'>Add to Chrome</Link>
+                            <Link href='/recipe' className='text-xl flex-1 font-medium rounded-full text-white py-5 px-6 bg-primary hover:text-primary lg:px-14 border border-primary hover:bg-transparent text-center'>Get Started</Link>
                             <Link href='/pricing' className='flex border flex-1 border-primary justify-center text-center rounded-full text-xl font-medium items-center py-5 px-10 text-primary hover:text-white hover:bg-primary'>Upgrade to Pro</Link>
                         </div>
                     </div>
