@@ -105,14 +105,14 @@ export default function EmptyRecipe({ setRecipe }) {
 
   return (
     <div className="text-center p-8">
-      <h1 className="text-3xl font-bold mb-8">Access Any Recipe, Instantly</h1>
+      <h1 className="text-3xl font-bold mb-8">Import a Recipe</h1>
       <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
         {/* Section 1: Paste Recipe URL */}
         <div className="p-6 rounded-lg shadow-lg flex flex-col items-center">
           <LinkIcon size={48} className="mb-4 text-primary" />
-          <h2 className="text-2xl font-semibold mb-2">Paste Recipe Url</h2>
+          <h2 className="text-2xl font-semibold mb-2">From a URL</h2>
           <p className="text-sm text-gray-600 mb-4 flex-grow">
-            Paste a recipe URL from any website to instantly import the recipe into your cooking assistant. This method is ideal for quickly adding recipes from your favorite food blogs or recipe websites.
+            Paste a URL from any website to import a recipe.
           </p>
           <form onSubmit={handleUrlSubmit} className="w-full flex flex-col items-center gap-4 mt-auto">
             <input
@@ -120,7 +120,7 @@ export default function EmptyRecipe({ setRecipe }) {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://example.com/recipe"
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border rounded-md text-sm"
               disabled={isLoading}
             />
             <button
@@ -136,9 +136,9 @@ export default function EmptyRecipe({ setRecipe }) {
         {/* Section 2: Get Chrome Extension */}
         <div className="p-6 rounded-lg shadow-lg flex flex-col items-center">
           <Chrome size={48} className="mb-4 text-primary" />
-          <h2 className="text-2xl font-semibold mb-2">Get Chrome Extension</h2>
+          <h2 className="text-2xl font-semibold mb-2">With our Extension</h2>
           <p className="text-sm text-gray-600 mb-4 flex-grow">
-            Install our Chrome extension to start cooking recipes from any webpage with a single click. This extension integrates seamlessly with your browser, making it effortless to use our cooking assistant with recipes you find on the web.
+            Install our Chrome extension to import recipes with a single click.
           </p>
           <a
             href="https://chromewebstore.google.com/detail/hpmfopnhhijgibfmdngonlnafldlngac?utm_source=item-share-cb"
@@ -157,9 +157,9 @@ export default function EmptyRecipe({ setRecipe }) {
         {/* Section 3: Upload Recipe Image */}
         <div className="p-6 rounded-lg shadow-lg flex flex-col items-center">
           <UploadCloud size={48} className="mb-4 text-primary" />
-          <h2 className="text-2xl font-semibold mb-2">Upload Recipe Image</h2>
+          <h2 className="text-2xl font-semibold mb-2">From an Image</h2>
           <p className="text-sm text-gray-600 mb-4 flex-grow">
-            Upload an image of a recipe from a cookbook, magazine, or handwritten note. Our system will automatically extract the recipe details, so you can use our cooking assistant to with recipes from any source.
+            Upload a photo of a recipe from a cookbook, magazine, or even a handwritten note.
           </p>
           <input
             type="file"
