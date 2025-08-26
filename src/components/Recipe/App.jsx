@@ -18,6 +18,7 @@ export default function App() {
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
   const reconnectTimer = useRef(null);
+  const transcriptsRef = useRef([]);
 
   async function startSession() {
     // Get an ephemeral key from the Fastify server
@@ -98,51 +99,21 @@ export default function App() {
   async function reconnectSession() {
     console.log("Reconnecting session...");
 
-    // 1. Fetch new ephemeral token
-    const tokenResponse = await generateToken();
-    const newEphemeralKey = tokenResponse.data.client_secret.value;
+    // 1. Collect transcripts from the old session
+    const transcripts = events
+      .filter((event) => event.type === "response.audio_transcript.done" && event.transcript)
+      .map((event) => event.transcript)
+      .reverse(); // reverse to maintain chronological order
+    transcriptsRef.current = transcripts;
 
     // 2. Keep old session alive (optional, for smoother transition)
     const oldPc = peerConnection.current;
     const oldDc = dataChannel;
 
-    // 3. Create a new peer connection
-    const newPc = new RTCPeerConnection();
-    audioElement.current = document.createElement("audio");
-    audioElement.current.autoplay = true;
-    newPc.ontrack = (e) => (audioElement.current.srcObject = e.streams[0]);
+    // 3. Start a new session
+    await startSession();
 
-    const ms = await navigator.mediaDevices.getUserMedia({ audio: true });
-    newPc.addTrack(ms.getTracks()[0]);
-
-    const newDc = newPc.createDataChannel("oai-events");
-    
-    // 4. Connect to new session
-    const offer = await newPc.createOffer();
-    await newPc.setLocalDescription(offer);
-
-    const baseUrl = "https://api.openai.com/v1/realtime";
-    const model = "gpt-4o-realtime-preview-2025-06-03";
-    const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
-      method: "POST",
-      body: offer.sdp,
-      headers: {
-        Authorization: `Bearer ${newEphemeralKey}`,
-        "Content-Type": "application/sdp",
-      },
-    });
-
-    const answer = {
-      type: "answer",
-      sdp: await sdpResponse.text(),
-    };
-    await newPc.setRemoteDescription(answer);
-
-    // 5. Update state with new session objects
-    peerConnection.current = newPc;
-    setDataChannel(newDc);
-
-    // 6. Close old session
+    // 4. Close old session
     if (oldDc) {
       oldDc.close();
     }
@@ -377,8 +348,13 @@ export default function App() {
     if (isSessionActive && dataChannel && recipe) {
       sendClientEvent(sessionUpdate());
       sendTextMessage(JSON.stringify(recipe));
+      if (transcriptsRef.current && transcriptsRef.current.length > 0) {
+        const transcriptText = transcriptsRef.current.join("\n");
+        sendTextMessage(transcriptText);
+        transcriptsRef.current = []; // Clear the transcripts after sending
+      }
     }
-  }, [isSessionActive, dataChannel, recipe, sendClientEvent, sendTextMessage, sessionUpdate]);
+  }, [isSessionActive, dataChannel, recipe, sendClientEvent, sendTextMessage, sessionUpdate, transcriptsRef]);
 
   return (
     <>
