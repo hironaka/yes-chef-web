@@ -10,6 +10,7 @@ import { useWakeLock } from "@/hooks/useWakeLock";
 
 export default function App() {
   const [isSessionActive, setIsSessionActive] = useState(false);
+  const [isReconnecting, setIsReconnecting] = useState(false);
   const [dataChannel, setDataChannel] = useState(null);
   const [recipe, setRecipe] = useState(null);
   const [events, setEvents] = useState([]);
@@ -98,12 +99,14 @@ export default function App() {
 
   async function reconnectSession() {
     console.log("Reconnecting session...");
+    setIsReconnecting(true);
 
     // 1. Collect transcripts from the old session
     const transcripts = events
       .filter((event) => event.type === "response.audio_transcript.done" && event.transcript)
       .map((event) => event.transcript)
       .reverse(); // reverse to maintain chronological order
+    console.log("Transcripts:", transcripts);
     transcriptsRef.current = transcripts;
 
     // 2. Keep old session alive (optional, for smoother transition)
@@ -162,6 +165,25 @@ export default function App() {
     sendClientEvent({ type: "response.create" });
   }, [sendClientEvent]);
 
+  const sendTranscriptMessage = useCallback((message) => {
+    const event = {
+      type: "conversation.item.create",
+      item: {
+        type: "message",
+        role: "model",
+        content: [
+          {
+            type: "input_text",
+            text: message,
+          },
+        ],
+      },
+    };
+
+    sendClientEvent(event);
+    sendClientEvent({ type: "response.create" });
+  }, [sendClientEvent]);
+
   // Attach event listeners to the data channel when a new one is created
   useEffect(() => {
     if (dataChannel) {
@@ -175,6 +197,7 @@ export default function App() {
       // Set session active when the data channel is opened
       dataChannel.addEventListener("open", () => {
         setIsSessionActive(true);
+        setIsReconnecting(false);
         // Start a 29-minute timer to reconnect the session
         reconnectTimer.current = setTimeout(() => {
           reconnectSession();
@@ -345,16 +368,16 @@ export default function App() {
 
   // Send the recipe to the model
   useEffect(() => {
-    if (isSessionActive && dataChannel && recipe) {
+    if (isSessionActive && dataChannel && recipe && !isReconnecting) {
       sendClientEvent(sessionUpdate());
       sendTextMessage(JSON.stringify(recipe));
       if (transcriptsRef.current && transcriptsRef.current.length > 0) {
         const transcriptText = transcriptsRef.current.join("\n");
+        sendTextMessage("We just reconnected from a previous session. Do not mention reconnecting. Continue as if it is mis conversation after the user makes another request. Here is the previous conversation history:");
         sendTextMessage(transcriptText);
-        transcriptsRef.current = []; // Clear the transcripts after sending
       }
     }
-  }, [isSessionActive, dataChannel, recipe, sendClientEvent, sendTextMessage, sessionUpdate, transcriptsRef]);
+  }, [isSessionActive, isReconnecting, dataChannel, recipe, sendClientEvent, sendTextMessage, sessionUpdate, transcriptsRef]);
 
   return (
     <>
@@ -365,7 +388,6 @@ export default function App() {
             setRecipe={setRecipe}
             sendClientEvent={sendClientEvent}
             sendTextMessage={sendTextMessage}
-            isSessionActive={isSessionActive}
           />
         </div>
         {recipe && (
