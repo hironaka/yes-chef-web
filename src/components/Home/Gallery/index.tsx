@@ -3,8 +3,18 @@ import Image from 'next/image';
 import { featuredRecipes, FeaturedRecipe } from '@/app/api/data';
 import Masonry from 'react-masonry-css';
 import Link from 'next/link';
+import { useRecipe } from '@/context/RecipeContext';
+import { useRouter } from 'next/navigation';
 
 const Gallery = () => {
+    const { setRecipe } = useRecipe();
+    const router = useRouter();
+
+    const handleViewRecipe = (recipe: FeaturedRecipe) => {
+        setRecipe(recipe.recipeJson);
+        router.push('/recipe');
+    };
+
     return (
         <section id="cook-section">
             <div className='container mx-auto lg:max-w-screen-xl md:max-w-screen-md' id='gallery-section'>
@@ -35,16 +45,14 @@ const Gallery = () => {
                                     </h3>
                                     <div className="flex items-center justify-between w-full">
                                         <p className='text-white text-base'>
-                                            Source: <span className='font-medium'>{item.websiteName}</span>
+                                            Source: <a href={item.recipeUrl} target="_blank" rel="noopener noreferrer" className='font-medium underline'>{item.websiteName}</a>
                                         </p>
-                                        <Link
-                                            href={item.recipeUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer" // Security for target="_blank"
+                                        <button
+                                            onClick={() => handleViewRecipe(item)}
                                             className='text-white rounded-full bg-primary border border-primary py-2 px-5 text-sm hover:bg-primary/40 hover:backdrop-blur-sm' // Adjusted padding/text size
                                         >
                                             View Recipe
-                                        </Link>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

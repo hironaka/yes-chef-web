@@ -7,13 +7,15 @@ import RecipePanel from "./RecipePanel";
 import Timer from "./Timer";
 import { generateToken } from '@/app/lib/actions';
 import { useWakeLock } from "@/hooks/useWakeLock";
+import { useRecipe } from "@/context/RecipeContext";
 
 export default function App() {
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [isReconnecting, setIsReconnecting] = useState(false);
   const [isLoadingRecipe, setIsLoadingRecipe] = useState(true);
   const [dataChannel, setDataChannel] = useState(null);
-  const [recipe, setRecipe] = useState(null);
+  const { recipe: contextRecipe, setRecipe: setContextRecipe } = useRecipe();
+  const [recipe, setRecipe] = useState(contextRecipe);
   const [events, setEvents] = useState([]);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const { isSupported } = useWakeLock(isSessionActive);
@@ -212,6 +214,11 @@ export default function App() {
 
   // Get the recipe from the browser extension
   useEffect(() => {
+    if (recipe) {
+      setIsLoadingRecipe(false);
+      return;
+    }
+
     const extensionId = 'hpmfopnhhijgibfmdngonlnafldlngac'; // Replace with your extension ID
     const safariExtensionId = 'ai.yes-chef.YesChef.Extension (6WY2A6DU5T)'; // Safari extension ID when available
     
@@ -278,7 +285,7 @@ export default function App() {
       setIsLoadingRecipe(false);
     }
 
-  }, []);
+  }, [recipe]);
 
   useEffect(() => {
     const checkScreenSize = () => {
