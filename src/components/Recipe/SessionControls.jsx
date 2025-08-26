@@ -19,7 +19,7 @@ function SessionStopped({ startSession }) {
         className={isActivating ? "text-primary text-sm bg-primary/15 hover:text-white hover:bg-primary cursor-not-allowed" : "bg-primary text-white text-sm hover:bg-primary/15 hover:text-primary"}
         icon={<CloudLightning height={16} />}
       >
-        {isActivating ? "starting session..." : "start session"}
+        {isActivating ? "starting..." : "start cooking"}
       </Button>
     </div>
   );
