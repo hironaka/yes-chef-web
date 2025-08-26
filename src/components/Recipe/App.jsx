@@ -17,6 +17,7 @@ export default function App() {
   const { isSupported } = useWakeLock(isSessionActive);
   const peerConnection = useRef(null);
   const audioElement = useRef(null);
+  const reconnectTimer = useRef(null);
 
   async function startSession() {
     // Get an ephemeral key from the Fastify server
@@ -86,6 +87,74 @@ export default function App() {
     setDataChannel(null);
     setEvents([]);
     peerConnection.current = null;
+
+    // Clear the reconnect timer
+    if (reconnectTimer.current) {
+      clearTimeout(reconnectTimer.current);
+      reconnectTimer.current = null;
+    }
+  }
+
+  async function reconnectSession() {
+    console.log("Reconnecting session...");
+
+    // 1. Fetch new ephemeral token
+    const tokenResponse = await generateToken();
+    const newEphemeralKey = tokenResponse.data.client_secret.value;
+
+    // 2. Keep old session alive (optional, for smoother transition)
+    const oldPc = peerConnection.current;
+    const oldDc = dataChannel;
+
+    // 3. Create a new peer connection
+    const newPc = new RTCPeerConnection();
+    audioElement.current = document.createElement("audio");
+    audioElement.current.autoplay = true;
+    newPc.ontrack = (e) => (audioElement.current.srcObject = e.streams[0]);
+
+    const ms = await navigator.mediaDevices.getUserMedia({ audio: true });
+    newPc.addTrack(ms.getTracks()[0]);
+
+    const newDc = newPc.createDataChannel("oai-events");
+    
+    // 4. Connect to new session
+    const offer = await newPc.createOffer();
+    await newPc.setLocalDescription(offer);
+
+    const baseUrl = "https://api.openai.com/v1/realtime";
+    const model = "gpt-4o-realtime-preview-2025-06-03";
+    const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
+      method: "POST",
+      body: offer.sdp,
+      headers: {
+        Authorization: `Bearer ${newEphemeralKey}`,
+        "Content-Type": "application/sdp",
+      },
+    });
+
+    const answer = {
+      type: "answer",
+      sdp: await sdpResponse.text(),
+    };
+    await newPc.setRemoteDescription(answer);
+
+    // 5. Update state with new session objects
+    peerConnection.current = newPc;
+    setDataChannel(newDc);
+
+    // 6. Close old session
+    if (oldDc) {
+      oldDc.close();
+    }
+    if (oldPc) {
+      oldPc.getSenders().forEach((sender) => {
+        if (sender.track) {
+          sender.track.stop();
+        }
+      });
+      oldPc.close();
+    }
+    console.log("Session reconnected.");
   }
 
   // Send a message to the model
@@ -135,6 +204,10 @@ export default function App() {
       // Set session active when the data channel is opened
       dataChannel.addEventListener("open", () => {
         setIsSessionActive(true);
+        // Start a 29-minute timer to reconnect the session
+        reconnectTimer.current = setTimeout(() => {
+          reconnectSession();
+        }, 29 * 60 * 1000);
       });
     }
   }, [dataChannel]);
@@ -213,6 +286,15 @@ export default function App() {
     window.addEventListener("resize", checkScreenSize);
 
     return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  // Clean up the timer when the component unmounts
+  useEffect(() => {
+    return () => {
+      if (reconnectTimer.current) {
+        clearTimeout(reconnectTimer.current);
+      }
+    };
   }, []);
 
   const systemInstruction = `
