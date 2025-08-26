@@ -102,12 +102,15 @@ export default function App() {
     setIsReconnecting(true);
 
     // 1. Collect transcripts from the old session
-    const transcripts = events
-      .filter((event) => event.type === "response.audio_transcript.done" && event.transcript)
-      .map((event) => event.transcript)
-      .reverse(); // reverse to maintain chronological order
-    console.log("Transcripts:", transcripts);
-    transcriptsRef.current = transcripts;
+    setEvents(prevEvents => {
+      const transcripts = prevEvents
+        .filter((event) => event.type === "response.audio_transcript.done" && event.transcript)
+        .map((event) => event.transcript)
+        .reverse(); // reverse to maintain chronological order
+      console.log("Transcripts:", transcripts);
+      transcriptsRef.current = transcripts;
+      return prevEvents;
+    });
 
     // 2. Keep old session alive (optional, for smoother transition)
     const oldPc = peerConnection.current;
@@ -373,7 +376,7 @@ export default function App() {
       sendTextMessage(JSON.stringify(recipe));
       if (transcriptsRef.current && transcriptsRef.current.length > 0) {
         const transcriptText = transcriptsRef.current.join("\n");
-        sendTextMessage("We just reconnected from a previous session. Do not mention reconnecting. Continue as if it is mis conversation after the user makes another request. Here is the previous conversation history:");
+        sendTextMessage("We just reconnected from a previous session. Do not mention reconnecting. Here is the previous conversation history:");
         sendTextMessage(transcriptText);
       }
     }
