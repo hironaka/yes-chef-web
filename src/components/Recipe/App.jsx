@@ -11,6 +11,7 @@ import { useWakeLock } from "@/hooks/useWakeLock";
 export default function App() {
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [isReconnecting, setIsReconnecting] = useState(false);
+  const [isLoadingRecipe, setIsLoadingRecipe] = useState(true);
   const [dataChannel, setDataChannel] = useState(null);
   const [recipe, setRecipe] = useState(null);
   const [events, setEvents] = useState([]);
@@ -248,6 +249,7 @@ export default function App() {
               } else {
                 console.error('No recipe received from Safari extension');
               }
+              setIsLoadingRecipe(false);
             });
           }
         } else {
@@ -260,18 +262,22 @@ export default function App() {
             } else {
               console.error(`No recipe received from ${browserType} extension`);
             }
+            setIsLoadingRecipe(false);
           });
         }
       } catch (error) {
         console.error('Error communicating with extension:', error);
         // Fallback: prompt user to manually input recipe or provide alternative
         console.log('Extension not available. Consider manual recipe input or alternative data source.');
+        setIsLoadingRecipe(false);
       }
     } else {
       console.error('Browser extension APIs not available');
       // Fallback: show UI for manual recipe input
       console.log('No extension support detected. Consider manual recipe input or alternative data source.');
+      setIsLoadingRecipe(false);
     }
+
   }, []);
 
   useEffect(() => {
@@ -387,6 +393,7 @@ export default function App() {
       <main className="flex flex-col items-center min-h-screen pt-20 px-4">
         <div className="w-full max-w-4xl pb-20">
           <RecipePanel
+            isLoading={isLoadingRecipe}
             recipe={recipe}
             setRecipe={setRecipe}
             sendClientEvent={sendClientEvent}

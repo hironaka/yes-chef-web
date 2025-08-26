@@ -19,8 +19,8 @@ function decodeHtmlEntities(text) {
 }
 
 export default function RecipePanel({
+  isLoading,
   recipe,
-  isSessionActive,
   sendClientEvent,
   events,
   setRecipe
@@ -125,9 +125,9 @@ export default function RecipePanel({
             </div>
             </div> {/* Close Grid Container */}
           </div>
-        ) : (
+        ) : !isLoading ? (
           <EmptyRecipe setRecipe={setRecipe} />
-        )}
+        ) : <div/> }
       </div>
     </section>
   );
