@@ -214,6 +214,10 @@ export default function App() {
 
   // Get the recipe from the browser extension
   useEffect(() => {
+    if (!isLoadingRecipe) {
+      return;
+    }
+
     if (recipe) {
       setIsLoadingRecipe(false);
       return;
@@ -285,7 +289,7 @@ export default function App() {
       setIsLoadingRecipe(false);
     }
 
-  }, [recipe]);
+  }, [recipe, isLoadingRecipe]);
 
   useEffect(() => {
     const checkScreenSize = () => {
