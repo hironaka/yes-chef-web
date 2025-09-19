@@ -2,33 +2,86 @@
 
 This project is a web interface for an AI-powered recipe assistant called "Yes Chef!". It allows users to interact with an AI sous-chef in real-time while viewing a recipe.
 
-**Core Technologies:**
+## Core Technologies
 
-*   [Next.js](https://nextjs.org/) (App Router)
-*   [React](https://reactjs.org/)
-*   [TypeScript](https://www.typescriptlang.org/)
-*   [Tailwind CSS](https://tailwindcss.com/)
-*   [OpenAI Realtime API](https://platform.openai.com/docs/guides/realtime)
-*   [Google Cloud Vertex AI](https://cloud.google.com/vertex-ai) (for recipe extraction)
-*   [WebRTC](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API)
+*   **Framework**: [Next.js](https://nextjs.org/) (App Router)
+*   **Language**: [TypeScript](https://www.typescriptlang.org/)
+*   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+*   **Database**: [PostgreSQL](https://www.postgresql.org/)
+*   **ORM**: [Prisma](https://www.prisma.io/)
+*   **Authentication**: [NextAuth.js](https://next-auth.js.org/)
+*   **AI**:
+    *   [OpenAI API](https://platform.openai.com/docs/guides/realtime)
+    *   [Google Cloud Vertex AI](https://cloud.google.com/vertex-ai)
+*   **Deployment**: [Heroku](https://www.heroku.com/)
 
-**Key Feature:** Real-time voice and text interaction with an AI assistant based on the recipe currently being viewed.
+## Key Feature
 
-**🚨 Important Dependency:** This web application requires a companion **Chrome Browser Extension** (ID: `lmakaflodkdoemdbcahofdoiihchjbim`) to be installed and active. The extension is responsible for providing the recipe data to this web interface. *Without the extension, the core recipe assistant feature will not function.* (Link to extension repository/store page should be added here if available).
+Real-time voice and text interaction with an AI assistant based on the recipe currently being viewed.
+
+**🚨 Important Dependency:** This web application requires a companion **Chrome Browser Extension** to be installed and active. The extension is responsible for providing the recipe data to this web interface. *Without the extension, the core recipe assistant feature will not function.*
+
+## Architecture Overview
+
+This is a Next.js 15 (App Router) application that provides a web interface for an AI-powered recipe assistant called "Yes Chef!". The core feature is real-time voice and text interaction with an AI sous-chef while viewing recipes.
+
+### Key Dependencies & Integration
+
+- **Chrome Extension Dependency:** Requires companion Chrome Extension for recipe data
+- **OpenAI Realtime API:** Powers voice/text AI interaction via WebRTC
+- **Google Cloud Vertex AI:** Used for recipe extraction from URLs
+- **NextAuth.js:** Authentication with Google, Facebook, and credentials providers
+- **Prisma + PostgreSQL:** Database layer with user management and data deletion tracking
+
+### Core Architecture
+
+**Frontend Structure:**
+- `src/app/` - Next.js App Router pages and API routes
+- `src/components/` - React components organized by feature (Auth, Recipe, Home, Layout)
+- `src/components/Recipe/App.jsx` - Main recipe assistant interface with WebRTC integration
+
+**Recipe Assistant Flow:**
+1. Extension provides recipe data to web interface
+2. User initiates session via SessionControls component
+3. WebRTC connection established with OpenAI Realtime API
+4. Real-time voice/text communication with AI sous-chef
+5. Timer functionality integrated for cooking instructions
+
+**Authentication & Database:**
+- Multi-provider auth (Google, Facebook, email/password)
+- Prisma schema includes NextAuth tables plus custom DataDeletionRequest model
+- JWT session strategy for scalability
+
+**Key Integration Points:**
+- `/api/recipe/extract` - Vertex AI recipe extraction endpoint
+- Extension communication via `chrome.runtime.sendMessage`
+- WebRTC data channels for AI event streaming
+- Timer system with audio notifications
+
+## Project Structure
+
+The project is organized as follows:
+
+*   `src/app`: Contains the main application routes, including `api`, `contact`, `recipe`, and user authentication pages.
+*   `src/components`: Reusable React components used throughout the application.
+*   `src/lib`: Utility functions and actions.
+*   `prisma`: Contains the database schema (`schema.prisma`) and migrations.
+*   `public`: Static assets such as images and audio files.
 
 ## Getting Started
 
 ### Prerequisites
 
-*   [Node.js](https://nodejs.org/) (Check `.nvmrc` or `package.json` engines field for specific version requirements, if any)
+*   [Node.js](https://nodejs.org/)
 *   [npm](https://www.npmjs.com/) (usually comes with Node.js)
-*   The companion Chrome Extension (ID: `lmakaflodkdoemdbcahofdoiihchjbim`) installed in your browser.
+*   [PostgreSQL](https://www.postgresql.org/)
+*   The companion Chrome Extension installed in your browser.
 
 ### Installation
 
 1.  **Clone the repository:**
     ```bash
-    git clone <repository-url> # Replace with the actual URL
+    git clone <repository-url>
     cd yes-chef-web
     ```
 
@@ -42,20 +95,29 @@ This project is a web interface for an AI-powered recipe assistant called "Yes C
         ```bash
         cp .env.example .env.local
         ```
-    *   You'll need an OpenAI API key. [Create one here if you don't have one](https://platform.openai.com/settings/api-keys).
-    *   Open `.env.local` and add your OpenAI API key:
-        ```
-        OPENAI_API_KEY=your_openai_api_key_here
-        ```
-    *   This project also uses Google Cloud Vertex AI for recipe extraction. You'll need Google Cloud credentials.
-    *   Copy the example environment file:
+    *   Open `.env.local` and configure the following variables:
+        *   `DATABASE_URL`: Your PostgreSQL connection string.
+        *   `OPENAI_API_KEY`: Your OpenAI API key.
+        *   `GCP_PROJECT`: Your Google Cloud project ID.
+        *   `GCP_LOCATION`: Your Google Cloud location.
+        *   `GOOGLE_APPLICATION_CREDENTIALS`: Path to your Google Cloud service account key file.
+        *   `NEXTAUTH_SECRET`: A secret key for NextAuth.js.
+        *   `NEXTAUTH_URL`: The URL of your application.
+
+4.  **Set up the database:**
+    *   Run the following command to create the database schema:
         ```bash
-        cp .env.example .env.local
+        npx prisma db push
         ```
-    *   Open `.env.local` and configure it according to the instructions within `.env.example`. This involves setting your `GCP_PROJECT` ID and potentially `GCP_LOCATION`.
-    *   **Authentication:**
-        *   **Local Development:** The recommended way is to use Application Default Credentials (ADC). Run `gcloud auth application-default login` in your terminal. Alternatively, download a service account key file, store it securely **outside** your project repository, and set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of that file (e.g., `export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/secure/keyfile.json"`).
-        *   **Heroku Deployment:** Follow the instructions in `.env.example` to set the `GCP_SA_KEY_JSON` config variable in Heroku with the *content* of your downloaded service account key file. The included `Procfile` will handle setting `GOOGLE_APPLICATION_CREDENTIALS` automatically at runtime.
+
+### Database Operations
+
+```bash
+npx prisma generate    # Generate Prisma client
+npx prisma db push     # Push schema changes to database
+npx prisma migrate dev # Create and apply migrations
+npx prisma studio      # Open database browser
+```
 
 ### Running the Development Server
 
