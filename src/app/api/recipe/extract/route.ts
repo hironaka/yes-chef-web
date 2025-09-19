@@ -13,8 +13,7 @@ if (!project) {
 const ai = new GoogleGenAI({
   vertexai: true,
   project: project,
-  location: location,
-  apiVersion: 'v1beta1',
+  location: location
 });
 
 const modelName = 'gemini-2.5-flash'; // Use appropriate Vertex AI model name
@@ -62,11 +61,11 @@ Do not include any introductory phrases like "Here is the JSON:" or explanations
     const req = {
       model: modelName,
       contents: [{ role: 'user', parts: parts }],
-      generationConfig: {
+      config: {
         responseMimeType: "application/json",
+        tools: [{urlContext: {}}],
         temperature: 0.2,
       },
-      tools: [{urlContext: {}}],
     };
 
     // Using generateContent from the ai.models endpoint
