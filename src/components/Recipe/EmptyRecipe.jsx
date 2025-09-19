@@ -5,7 +5,8 @@ import { Chrome, Link as LinkIcon, UploadCloud } from 'react-feather';
 
 export default function EmptyRecipe({ setRecipe }) {
   const [url, setUrl] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingUrl, setIsLoadingUrl] = useState(false);
+  const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -15,7 +16,7 @@ export default function EmptyRecipe({ setRecipe }) {
       setError('Please enter a URL.');
       return;
     }
-    setIsLoading(true);
+    setIsLoadingUrl(true);
     setError(null);
 
     try {
@@ -43,7 +44,7 @@ export default function EmptyRecipe({ setRecipe }) {
     } catch (err) {
       setError(err.message);
     } finally {
-      setIsLoading(false);
+      setIsLoadingUrl(false);
     }
   };
 
@@ -66,7 +67,7 @@ export default function EmptyRecipe({ setRecipe }) {
     const file = e.target.files[0];
     if (!file) return;
 
-    setIsLoading(true);
+    setIsLoadingImage(true);
     setError(null);
 
     try {
@@ -95,7 +96,7 @@ export default function EmptyRecipe({ setRecipe }) {
     } catch (err) {
       setError(err.message);
     } finally {
-      setIsLoading(false);
+      setIsLoadingImage(false);
     }
   };
 
@@ -121,14 +122,14 @@ export default function EmptyRecipe({ setRecipe }) {
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://example.com/recipe"
               className="w-full p-2 border rounded-md text-sm"
-              disabled={isLoading}
+              disabled={isLoadingImage || isLoadingUrl}
             />
             <button
               type="submit"
               className="bg-primary text-white py-2 px-6 rounded-full hover:bg-primary/90 disabled:bg-gray-400 w-full"
               disabled={isLoading}
             >
-              {isLoading ? 'Extracting...' : 'Import Recipe'}
+              {isLoadingUrl ? 'Extracting...' : 'Import Recipe'}
             </button>
           </form>
         </div>
@@ -171,9 +172,9 @@ export default function EmptyRecipe({ setRecipe }) {
           <button
             onClick={triggerFileUpload}
             className="bg-primary text-white py-2 px-6 rounded-full hover:bg-primary/90 w-full mt-auto"
-            disabled={isLoading}
+            disabled={isLoadingImage || isLoadingUrl}
           >
-            {isLoading ? 'Extracting...' : 'Upload Image'}
+            {isLoadingImage ? 'Extracting...' : 'Upload Image'}
           </button>
         </div>
       </div>
