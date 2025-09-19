@@ -63,7 +63,6 @@ Do not include any introductory phrases like "Here is the JSON:" or explanations
       contents: [{ role: 'user', parts: parts }],
       config: {
         responseMimeType: "application/json",
-        tools: [{urlContext: {}}],
         temperature: 0.2,
       },
     };
@@ -74,23 +73,20 @@ Do not include any introductory phrases like "Here is the JSON:" or explanations
     // Extract text from the response
     const responseContent = resp.text;
 
-
     if (!responseContent) {
       console.error(`No response content received from the API. Response: ${resp}`);
       throw new Error('No response content received from the API.');
     }
 
     try {
-      // Sanitize the response to remove markdown code blocks, as the model may still include them
-      const sanitizedResponse = responseContent.replace(/```json\n?|```/g, '').trim();
-      const recipeJson = JSON.parse(sanitizedResponse);
+      const recipeJson = JSON.parse(responseContent);
       if (recipeJson.recipeFound === false) {
         return NextResponse.json(recipeJson);
       }
       return NextResponse.json(recipeJson);
     } catch (parseError) {
       console.error('Failed to parse Vertex AI response as JSON (even with responseMimeType):', parseError);
-      console.error('Raw Vertex AI response:', responseContent);
+      console.error('Raw Vertex AI response:', resp.text);
       // Fallback if JSON parsing fails unexpectedly
       return NextResponse.json({ recipeFound: false, error: 'Failed to process recipe data' });
     }
