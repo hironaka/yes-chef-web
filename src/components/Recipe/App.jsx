@@ -397,10 +397,11 @@ export default function App() {
         const transcriptText = transcriptsRef.current.join("\n");
         sendTextMessage("We just reconnected from a previous session. Do not mention reconnecting. Here is the previous conversation history:");
         sendTextMessage(transcriptText);
+      } else {
+        sendClientEvent({
+          type: "response.create",
+        });
       }
-      sendClientEvent({
-        type: "response.create",
-      });
     }
   }, [isSessionActive, isReconnecting, dataChannel, recipe, sendClientEvent, sendTextMessage, sessionUpdate, transcriptsRef]);
 
