@@ -60,15 +60,13 @@ Do not include any introductory phrases like "Here is the JSON:" or explanations
 
     // Construct the request for the new API
     const req = {
-        model: modelName,
-        contents: [{ role: 'user', parts: parts }],
-        config: {
-          tools: [{urlContext: {}}],
+      model: modelName,
+      contents: [{ role: 'user', parts: parts }],
+      config: {
+        responseMimeType: "application/json",
+        tools: [{urlContext: {}}],
+        temperature: 0.2,
       },
-        generationConfig: {
-            responseMimeType: "application/json",
-            temperature: 0.2,
-        },
     };
 
     // Using generateContent from the ai.models endpoint
