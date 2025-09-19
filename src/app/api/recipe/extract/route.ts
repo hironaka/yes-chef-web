@@ -81,8 +81,9 @@ Do not include any introductory phrases like "Here is the JSON:" or explanations
     }
 
     try {
-      // The response should already be JSON if responseMimeType is respected
-      const recipeJson = JSON.parse(responseContent);
+      // Sanitize the response to remove markdown code blocks, as the model may still include them
+      const sanitizedResponse = responseContent.replace(/```json\n?|```/g, '').trim();
+      const recipeJson = JSON.parse(sanitizedResponse);
       if (recipeJson.recipeFound === false) {
         return NextResponse.json(recipeJson);
       }
