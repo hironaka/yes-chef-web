@@ -62,11 +62,11 @@ Do not include any introductory phrases like "Here is the JSON:" or explanations
     const req = {
       model: modelName,
       contents: [{ role: 'user', parts: parts }],
-      config: {
+      generationConfig: {
         responseMimeType: "application/json",
-        tools: [{urlContext: {}}],
         temperature: 0.2,
       },
+      tools: [{urlContext: {}}],
     };
 
     // Using generateContent from the ai.models endpoint
