@@ -24,7 +24,7 @@ export default function App() {
   const reconnectTimer = useRef(null);
   const transcriptsRef = useRef([]);
 
-  async function startSession() {
+  const startSession = useCallback(async () => {
     // Get an ephemeral key from the Fastify server
     const tokenResponse = await generateToken();
     console.log(tokenResponse);
@@ -70,7 +70,7 @@ export default function App() {
     await pc.setRemoteDescription(answer);
 
     peerConnection.current = pc;
-  }
+  }, []);
 
   // Stop current session, clean up peer connection and data channel
   function stopSession() {
@@ -100,7 +100,7 @@ export default function App() {
     }
   }
 
-  async function reconnectSession() {
+  const reconnectSession = useCallback(async () => {
     console.log("Reconnecting session...");
     setIsReconnecting(true);
 
@@ -135,7 +135,7 @@ export default function App() {
       oldPc.close();
     }
     console.log("Session reconnected.");
-  }
+  }, [peerConnection, dataChannel, startSession]);
 
   // Send a message to the model
   const sendClientEvent = useCallback((message) => {
@@ -210,7 +210,7 @@ export default function App() {
         }, 29 * 60 * 1000);
       });
     }
-  }, [dataChannel]);
+  }, [dataChannel, reconnectSession]);
 
   // Get the recipe from the browser extension
   useEffect(() => {
