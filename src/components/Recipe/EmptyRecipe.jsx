@@ -126,7 +126,7 @@ export default function EmptyRecipe({ setRecipe }) {
             />
             <button
               type="submit"
-              className="bg-primary text-white py-2 px-6 rounded-full hover:bg-primary/90 disabled:bg-gray-400 w-full"
+              className="bg-primary text-white py-2 px-6 rounded-full hover:bg-primary/90"
               disabled={isLoadingImage || isLoadingUrl}
             >
               {isLoadingUrl ? 'Extracting...' : 'Import Recipe'}
