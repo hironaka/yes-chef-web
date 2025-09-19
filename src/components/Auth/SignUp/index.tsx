@@ -43,6 +43,10 @@ const SignUp: React.FC<SignUpProps> = ({ setIsSignInOpen, setIsSignUpOpen }) => 
         toast.success("Successfully registered! Please sign in.");
         setLoading(false);
         router.push("/"); // Redirect to home or sign-in page after successful registration
+        if (setIsSignInOpen && setIsSignUpOpen) {
+          setIsSignInOpen(true);
+          setIsSignUpOpen(false);
+        }
         // Consider closing the modal if this component is used within one
       })
       .catch((err) => {
