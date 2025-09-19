@@ -417,15 +417,6 @@ export default function App() {
         </div>
         {recipe && (
           <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-40 flex flex-col items-center">
-            {isSmallScreen && (
-              <div className="mb-4">
-                <Timer
-                  isSessionActive={isSessionActive}
-                  sendClientEvent={sendClientEvent}
-                  events={events}
-                />
-              </div>
-            )}
             <SessionControls
               startSession={startSession}
               stopSession={stopSession}
@@ -437,7 +428,15 @@ export default function App() {
       </main>
 
       {/* Timer positioned in bottom right on larger screens */}
-      {!isSmallScreen && (
+      {isSmallScreen ? (
+        <div className="fixed top-11 right-10 z-50">
+          <Timer
+            isSessionActive={isSessionActive}
+            sendClientEvent={sendClientEvent}
+            events={events}
+          />
+        </div>
+      ) : (
         <div className="fixed bottom-10 right-10 z-50">
           <Timer
             isSessionActive={isSessionActive}
@@ -449,3 +448,4 @@ export default function App() {
     </>
   );
 }
+
