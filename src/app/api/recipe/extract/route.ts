@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { VertexAI, HarmCategory, HarmBlockThreshold } from '@google-cloud/vertexai';
+import { GoogleGenAI } from "@google/genai";
 
-// Initialize Vertex AI
+// Initialize Google GenAI
 const project = process.env.GCP_PROJECT || '';
 const location = process.env.GCP_LOCATION || 'us-central1'; // Default location, adjust if needed
 
@@ -10,15 +10,14 @@ if (!project) {
   // Optionally throw an error or handle appropriately if project ID is absolutely required at startup
 }
 
-const vertexAI = new VertexAI({ project: project, location: location });
-
-const modelName = 'gemini-2.0-flash'; // Use appropriate Vertex AI model name
-
-const generativeModel = vertexAI.getGenerativeModel({
-  model: modelName,
-  // Safety settings and generation config are now part of the request
+const ai = new GoogleGenAI({
+  vertexai: true,
+  project: project,
+  location: location,
+  apiVersion: 'v1beta1',
 });
 
+const modelName = 'gemini-2.5-flash-lite'; // Use appropriate Vertex AI model name
 
 export async function POST(request: Request) {
   try {
@@ -59,47 +58,29 @@ Do not include any introductory phrases like "Here is the JSON:" or explanations
     
     parts.push({ text: systemPromptContent });
 
-    const userMessage = {
-        role: 'user',
-        parts: parts,
-    };
-
-    // Construct the request for Vertex AI
+    // Construct the request for the new API
     const req = {
-        contents: [userMessage],
+        model: modelName,
+        contents: [{ role: 'user', parts: parts }],
+        config: {
+          tools: [{urlContext: {}}],
+      },
         generationConfig: {
             responseMimeType: "application/json",
             temperature: 0.2,
         },
-        safetySettings: [
-            { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-            { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-            { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-            { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
-        ],
-        // systemInstruction: { parts: [{ text: systemPromptContent }] } // Use this if SDK supports direct systemInstruction
     };
 
-    // Using generateContent (non-streaming) for simplicity unless streaming is required
-    const resp = await generativeModel.generateContent(req);
-    const aggregatedResponse = resp.response; // Access the response object directly
-
-
-    // Extract text from the aggregated response
-    const responseContent = aggregatedResponse.candidates?.[0]?.content?.parts?.[0]?.text;
+    // Using generateContent from the ai.models endpoint
+    const resp = await ai.models.generateContent(req);
+    
+    // Extract text from the response
+    const responseContent = resp.text;
 
 
     if (!responseContent) {
-      const blockReason = aggregatedResponse.promptFeedback?.blockReason;
-      if (blockReason) {
-          console.error(`Request blocked due to safety settings: ${blockReason}`);
-          // Return the standard "not found" response when blocked, or a specific error
-          return NextResponse.json({ recipeFound: false, error: `Content blocked: ${blockReason}` });
-      }
-      // Check finish reason if available
-      const finishReason = aggregatedResponse.candidates?.[0]?.finishReason;
-      console.error(`No response content received. Finish reason: ${finishReason}`);
-      throw new Error(`No response content received from Vertex AI. Finish Reason: ${finishReason || 'Unknown'}`);
+      console.error(`No response content received from the API. Response: ${resp}`);
+      throw new Error('No response content received from the API.');
     }
 
     try {
