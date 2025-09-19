@@ -21,7 +21,6 @@ function decodeHtmlEntities(text) {
 export default function RecipePanel({
   isLoading,
   recipe,
-  sendClientEvent,
   events,
   setRecipe
 }) {

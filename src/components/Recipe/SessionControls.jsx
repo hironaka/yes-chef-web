@@ -40,7 +40,6 @@ export default function SessionControls({
   startSession,
   stopSession,
   sendClientEvent,
-  sendTextMessage,
   serverEvents,
   isSessionActive,
 }) {

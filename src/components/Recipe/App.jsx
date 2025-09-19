@@ -27,7 +27,6 @@ export default function App() {
   const startSession = useCallback(async () => {
     // Get an ephemeral key from the Fastify server
     const tokenResponse = await generateToken();
-    console.log(tokenResponse);
     const EPHEMERAL_KEY = tokenResponse.data.client_secret.value;
 
     // Create a peer connection
@@ -168,7 +167,6 @@ export default function App() {
     };
 
     sendClientEvent(event);
-    sendClientEvent({ type: "response.create" });
   }, [sendClientEvent]);
 
   const sendTranscriptMessage = useCallback((message) => {
@@ -187,7 +185,6 @@ export default function App() {
     };
 
     sendClientEvent(event);
-    sendClientEvent({ type: "response.create" });
   }, [sendClientEvent]);
 
   // Attach event listeners to the data channel when a new one is created
@@ -197,13 +194,16 @@ export default function App() {
       dataChannel.addEventListener("message", (e) => {
         const eventData = JSON.parse(e.data);
         console.log('Server Event:', JSON.stringify(eventData, null, 2));
+        if (eventData.type === 'session.created') {
+          setIsSessionActive(true);
+          setIsReconnecting(false);
+        }
         setEvents(prevEvents => [eventData, ...prevEvents]);
       });
 
       // Set session active when the data channel is opened
       dataChannel.addEventListener("open", () => {
-        setIsSessionActive(true);
-        setIsReconnecting(false);
+        console.log('Data channel open');
         // Start a 29-minute timer to reconnect the session
         reconnectTimer.current = setTimeout(() => {
           reconnectSession();
@@ -314,7 +314,7 @@ export default function App() {
   const systemInstruction = `
   You are a helpful sous-chef working as an assistant to a chef.
 
-  Start by saying 'yes chef' and wait for a question. After the initial greeting, do not say 'yes chef' ever again.
+  Start by speaking 'yes chef' and wait for a question. After the initial greeting, do not say 'yes chef' ever again.
   
   Only give instructions when asked. Be as incremental and step by step as possible.
 
@@ -398,6 +398,9 @@ export default function App() {
         sendTextMessage("We just reconnected from a previous session. Do not mention reconnecting. Here is the previous conversation history:");
         sendTextMessage(transcriptText);
       }
+      sendClientEvent({
+        type: "response.create",
+      });
     }
   }, [isSessionActive, isReconnecting, dataChannel, recipe, sendClientEvent, sendTextMessage, sessionUpdate, transcriptsRef]);
 
@@ -409,8 +412,6 @@ export default function App() {
             isLoading={isLoadingRecipe}
             recipe={recipe}
             setRecipe={setRecipe}
-            sendClientEvent={sendClientEvent}
-            sendTextMessage={sendTextMessage}
           />
         </div>
         {recipe && (
@@ -428,7 +429,6 @@ export default function App() {
               startSession={startSession}
               stopSession={stopSession}
               sendClientEvent={sendClientEvent}
-              sendTextMessage={sendTextMessage}
               isSessionActive={isSessionActive}
             />
           </div>
