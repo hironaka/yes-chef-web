@@ -16,7 +16,7 @@ const ai = new GoogleGenAI({
   location: location
 });
 
-const modelName = 'gemini-2.5-flash'; // Use appropriate Vertex AI model name
+const modelName = 'gemini-2.5-flash-lite'; // Use appropriate Vertex AI model name
 
 export async function POST(request: Request) {
   try {
