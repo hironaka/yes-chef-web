@@ -20,7 +20,7 @@ const Search = () => {
             Find your next favorite meal
           </h2>
         </div>
-        <div className="my-16 px-40">
+        <div className="my-16 px-16 sm:px-20 md:px-30">
           <input
             type="text"
             placeholder="Google recipe search"
