@@ -2,9 +2,11 @@
 import React from "react";
 
 const Search = () => {
-  const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      const query = event.currentTarget.value;
+  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const query = (form.elements.namedItem("search") as HTMLInputElement).value;
+    if (query) {
       window.open(`https://www.google.com/search?q=${query}`, "_blank");
     }
   };
@@ -20,14 +22,17 @@ const Search = () => {
             Find your next favorite meal
           </h2>
         </div>
-        <div className="my-16 px-16 sm:px-20 md:px-30">
+        <form
+          className="my-16 px-16 sm:px-20 md:px-30"
+          onSubmit={handleSearch}
+        >
           <input
             type="text"
+            name="search"
             placeholder="Google recipe search"
-            onKeyDown={handleSearch}
             className="w-full min-w-[250px] py-4 px-6 text-base border-2 border-gray-300 rounded-full focus:outline-none focus:border-primary dark:bg-gray-800 dark:text-white"
           />
-        </div>
+        </form>
         <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-md">
           <h2 className="text-xl font-semibold text-black dark:text-white mb-4">
             How to use Yes Chef
