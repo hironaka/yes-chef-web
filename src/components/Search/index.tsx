@@ -20,7 +20,7 @@ const Search = () => {
             Find your next favorite meal
           </h2>
         </div>
-        <div className="my-16 px-16 sm:px-20 md:px-40 lg:px-80">
+        <div className="my-16 px-40">
           <input
             type="text"
             placeholder="Google recipe search"
@@ -46,7 +46,7 @@ const Search = () => {
                 2
               </span>
               <span className="text-gray-700 dark:text-gray-300">
-                Tap "Download" to save the recipe to your library
+                Tap &quotDownload&quot to save the recipe to your library
               </span>
             </li>
             <li className="flex items-start">
