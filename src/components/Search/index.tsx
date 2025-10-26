@@ -25,7 +25,7 @@ const Search = () => {
             type="text"
             placeholder="Google recipe search"
             onKeyDown={handleSearch}
-            className="w-full py-4 px-6 text-base border-2 border-gray-300 rounded-full focus:outline-none focus:border-primary dark:bg-gray-800 dark:text-white"
+            className="w-full min-w-[250px] py-4 px-6 text-base border-2 border-gray-300 rounded-full focus:outline-none focus:border-primary dark:bg-gray-800 dark:text-white"
           />
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-md">
@@ -34,7 +34,7 @@ const Search = () => {
           </h2>
           <ol className="list-decimal list-inside space-y-4">
             <li className="flex items-start">
-              <span className="bg-primary text-white rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3">
+              <span className="bg-primary text-white rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3 flex-shrink-0">
                 1
               </span>
               <span className="text-gray-700 dark:text-gray-300">
@@ -42,19 +42,19 @@ const Search = () => {
               </span>
             </li>
             <li className="flex items-start">
-              <span className="bg-primary text-white rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3">
+              <span className="bg-primary text-white rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3 flex-shrink-0">
                 2
               </span>
               <span className="text-gray-700 dark:text-gray-300">
-                Tap &quotDownload&quot to save the recipe to your library
+                Tap Download to save the recipe
               </span>
             </li>
             <li className="flex items-start">
-              <span className="bg-primary text-white rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3">
+              <span className="bg-primary text-white rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3 flex-shrink-0">
                 3
               </span>
               <span className="text-gray-700 dark:text-gray-300">
-                Access your saved recipes anytime, even offline
+                Access your saved recipes anytime
               </span>
             </li>
           </ol>
