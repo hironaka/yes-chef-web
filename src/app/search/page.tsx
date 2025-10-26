@@ -12,7 +12,6 @@ export default function SearchPage() {
         <main>
             <div className="pt-[140px]"/>
             <Search />
-            <Gallery />
         </main>
     );
 }
