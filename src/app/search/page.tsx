@@ -9,8 +9,7 @@ export const metadata: Metadata = {
 
 export default function SearchPage() {
     return (
-        <main>
-            <div className="pt-[140px]"/>
+        <main className="flex items-center justify-center min-h-screen">
             <Search />
         </main>
     );
