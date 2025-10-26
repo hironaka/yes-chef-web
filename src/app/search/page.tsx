@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function SearchPage() {
     return (
-        <main className="flex items-center justify-center min-h-screen bg-[#fafafa]">
+        <main className="flex items-center justify-center min-h-screen">
             <Search />
         </main>
     );
