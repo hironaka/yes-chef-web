@@ -25,7 +25,7 @@ const Search = () => {
             type="text"
             placeholder="Google recipe search"
             onKeyDown={handleSearch}
-            className="w-full p-2 text-lg border-2 border-gray-300 rounded-full focus:outline-none focus:border-primary dark:bg-gray-800 dark:text-white"
+            className="w-full py-4 px-6 text-base border-2 border-gray-300 rounded-full focus:outline-none focus:border-primary dark:bg-gray-800 dark:text-white"
           />
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-md">
