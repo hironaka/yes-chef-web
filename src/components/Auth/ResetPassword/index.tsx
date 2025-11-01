@@ -78,7 +78,7 @@ const ResetPassword = ({ token }: { token: string }) => {
   };
 
   return (
-    <section className="bg-[#F4F7FF] py-44 dark:bg-dark lg:py-44">
+    <section className="py-44 dark:bg-dark lg:py-44">
       <div className="container">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
