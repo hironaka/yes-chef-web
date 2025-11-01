@@ -7,7 +7,7 @@ export default function PricingPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
 
         {/* Free Plan Card */}
-        <div className="border rounded-lg p-8 flex flex-col">
+        <div className="shadow-lg rounded-lg p-8 flex flex-col bg-white">
           <h2 className="text-2xl font-semibold mb-4">Free</h2>
           <p className="text-3xl font-bold mb-6">$0</p>
           <ul className="list-disc list-inside mb-8 space-y-2 flex-grow">
@@ -22,7 +22,7 @@ export default function PricingPage() {
         </div>
 
         {/* Pro Plan Card */}
-        <div className="border rounded-lg p-8 flex flex-col bg-gray-50 dark:bg-gray-800">
+        <div className="shadow-lg rounded-lg p-8 flex flex-col bg-gray-50 dark:bg-gray-800">
           <h2 className="text-2xl font-semibold mb-4">Pro</h2>
           <p className="text-3xl font-bold mb-6">Coming Soon!</p>
           <ul className="list-disc list-inside mb-8 space-y-2 flex-grow">

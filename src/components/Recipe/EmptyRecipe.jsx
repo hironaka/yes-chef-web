@@ -106,36 +106,11 @@ export default function EmptyRecipe({ setRecipe }) {
 
   return (
     <div className="text-center p-8">
-      <h1 className="text-3xl font-bold mb-8">Import a Recipe</h1>
-      <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-        {/* Section 1: Paste Recipe URL */}
-        <div className="p-6 rounded-lg shadow-lg flex flex-col items-center">
-          <LinkIcon size={48} className="mb-4 text-primary" />
-          <h2 className="text-2xl font-semibold mb-2">From a URL</h2>
-          <p className="text-sm text-gray-600 mb-4 flex-grow">
-            Paste a URL from any website to start cooking with our voice assistant.
-          </p>
-          <form onSubmit={handleUrlSubmit} className="w-full flex flex-col items-center gap-4 mt-auto">
-            <input
-              type="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://example.com/recipe"
-              className="w-full p-2 border rounded-md text-sm"
-              disabled={isLoadingImage || isLoadingUrl}
-            />
-            <button
-              type="submit"
-              className="bg-primary text-white py-2 px-6 rounded-full hover:bg-primary/90"
-              disabled={isLoadingImage || isLoadingUrl}
-            >
-              {isLoadingUrl ? 'Extracting...' : 'Import Recipe'}
-            </button>
-          </form>
-        </div>
+      <h1 className="text-4xl font-bold text-center mb-12">Import a Recipe</h1>
+      <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
 
-        {/* Section 2: Get Chrome Extension */}
-        <div className="p-6 rounded-lg shadow-lg flex flex-col items-center">
+        {/* Section 1: Get Chrome Extension */}
+        <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
           <Chrome size={48} className="mb-4 text-primary" />
           <h2 className="text-2xl font-semibold mb-2">Use our Extension</h2>
           <p className="text-sm text-gray-600 mb-4 flex-grow">
@@ -155,8 +130,8 @@ export default function EmptyRecipe({ setRecipe }) {
           </a>
         </div>
 
-        {/* Section 3: Upload Recipe Image */}
-        <div className="p-6 rounded-lg shadow-lg flex flex-col items-center">
+        {/* Section 2: Upload Recipe Image */}
+        <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
           <UploadCloud size={48} className="mb-4 text-primary" />
           <h2 className="text-2xl font-semibold mb-2">From an Image</h2>
           <p className="text-sm text-gray-600 mb-4 flex-grow">
