@@ -33,13 +33,13 @@ const Search = () => {
             className="w-full min-w-[250px] py-4 px-6 text-base border-2 border-gray-300 rounded-full focus:outline-none focus:border-primary dark:bg-gray-800 dark:text-white"
           />
         </form>
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-md">
+        <div className="border bg-gray-50 dark:bg-gray-800 rounded-lg p-8">
           <h2 className="text-xl font-semibold text-black dark:text-white mb-4">
             How to use Yes Chef
           </h2>
           <ol className="list-decimal list-inside space-y-4">
             <li className="flex items-start">
-              <span className="bg-primary text-white rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3 flex-shrink-0">
+              <span className="bg-primary text-white rounded-full w-6 h-6 text-xs flex items-center justify-center mr-3 flex-shrink-0">
                 1
               </span>
               <span className="text-gray-700 dark:text-gray-300">
@@ -47,7 +47,7 @@ const Search = () => {
               </span>
             </li>
             <li className="flex items-start">
-              <span className="bg-primary text-white rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3 flex-shrink-0">
+              <span className="bg-primary text-white rounded-full w-6 h-6 text-xs flex items-center justify-center mr-3 flex-shrink-0">
                 2
               </span>
               <span className="text-gray-700 dark:text-gray-300">
@@ -55,7 +55,7 @@ const Search = () => {
               </span>
             </li>
             <li className="flex items-start">
-              <span className="bg-primary text-white rounded-full w-6 h-6 text-sm flex items-center justify-center mr-3 flex-shrink-0">
+              <span className="bg-primary text-white rounded-full w-6 h-6 text-xs flex items-center justify-center mr-3 flex-shrink-0">
                 3
               </span>
               <span className="text-gray-700 dark:text-gray-300">
