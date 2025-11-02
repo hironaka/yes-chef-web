@@ -30,10 +30,10 @@ const Search = () => {
             type="text"
             name="search"
             placeholder="Google recipe search"
-            className="w-full min-w-[250px] py-4 px-6 text-base border-2 border-gray-300 rounded-full focus:outline-none focus:border-primary dark:bg-gray-800 dark:text-white"
+            className="w-full min-w-[200px] py-4 px-6 text-base border-2 border-gray-300 rounded-full focus:outline-none focus:border-primary dark:bg-gray-800 dark:text-white"
           />
         </form>
-        <div className="border bg-gray-50 dark:bg-gray-800 rounded-lg p-8">
+        <div className="border bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mx-6">
           <h2 className="text-xl font-semibold text-black dark:text-white mb-4">
             How to use Yes Chef
           </h2>
@@ -42,7 +42,7 @@ const Search = () => {
               <span className="bg-primary text-white rounded-full w-6 h-6 text-xs flex items-center justify-center mr-3 flex-shrink-0">
                 1
               </span>
-              <span className="text-gray-700 dark:text-gray-300">
+              <span className="text-sm text-gray-700 dark:text-gray-300">
                 Find a recipe using the search above
               </span>
             </li>
@@ -50,15 +50,15 @@ const Search = () => {
               <span className="bg-primary text-white rounded-full w-6 h-6 text-xs flex items-center justify-center mr-3 flex-shrink-0">
                 2
               </span>
-              <span className="text-gray-700 dark:text-gray-300">
-                Tap Download to save the recipe
+              <span className="text-sm text-gray-700 dark:text-gray-300">
+                Download to save the recipe
               </span>
             </li>
             <li className="flex items-start">
               <span className="bg-primary text-white rounded-full w-6 h-6 text-xs flex items-center justify-center mr-3 flex-shrink-0">
                 3
               </span>
-              <span className="text-gray-700 dark:text-gray-300">
+              <span className="text-sm text-gray-700 dark:text-gray-300">
                 Access your saved recipes anytime
               </span>
             </li>
