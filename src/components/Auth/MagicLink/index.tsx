@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { sendSignInLinkToEmail } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import toast from "react-hot-toast";
 import { validateEmail } from "../../../utils/validateEmail";
 import Loader from "@/components/Common/Loader";
@@ -9,7 +10,7 @@ const MagicLink = () => {
   const [email, setEmail] = useState("");
   const [loader, setLoader] = useState(false);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     if (!email) {
@@ -21,22 +22,24 @@ const MagicLink = () => {
       setLoader(false);
       return toast.error("Please enter a valid email address.");
     } else {
-      signIn("email", {
-        redirect: false,
-        email: email,
-      })
-        .then((callback) => {
-          if (callback?.ok) {
-            toast.success("Email sent");
-            setEmail("");
-            setLoader(false);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.error("Unable to send email!");
-          setLoader(false);
-        });
+      try {
+        const actionCodeSettings = {
+          // URL you want to redirect back to. The domain (www.example.com) for this
+          // URL must be in the authorized domains list in the Firebase Console.
+          url: window.location.origin + '/finishSignUp?cartId=1234',
+          // This must be true.
+          handleCodeInApp: true,
+        };
+        await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+        window.localStorage.setItem('emailForSignIn', email);
+        toast.success("Magic link sent to your email!");
+        setEmail("");
+        setLoader(false);
+      } catch (error: any) {
+        console.error("Error sending magic link:", error);
+        toast.error(error.message || "Unable to send magic link!");
+        setLoader(false);
+      }
     }
   };
 

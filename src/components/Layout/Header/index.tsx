@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useCallback } from "react";
-import { useSession, signOut } from "next-auth/react"; // Import useSession and signOut
+import { useAuth } from "@/context/AuthContext"; // Import useAuth
 import Logo from "./Logo";
 import Image from "next/image";
 import Signin from "@/components/Auth/SignIn";
@@ -12,7 +12,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 
 
 const Header = () => {
-  const { data: session, status } = useSession(); // Get session status
+  const { user, loading, logout } = useAuth(); // Get user and logout from useAuth
   const pathUrl = usePathname();
   const isRecipePage = pathUrl === '/recipe';
   const { theme, setTheme } = useTheme();
@@ -80,15 +80,15 @@ const Header = () => {
           <Logo />
           {/* Navigation removed */}
           <div className="flex items-center gap-4">
-            {status === "loading" ? (
+            {loading ? (
               <></>
-            ) : status === "authenticated" ? (
+            ) : user ? (
               <>
                 <span className="hidden lg:block text-gray-700 dark:text-gray-200 mr-2">
-                  Hi, {session.user?.name || session.user?.email}
+                    Hi, {user.displayName || user.email}
                 </span>
                 <button
-                  onClick={() => signOut()}
+                    onClick={() => logout()}
                   className="hidden lg:block text-primary bg-primary/15 hover:text-white hover:bg-primary font-medium text-lg py-4 px-8 rounded-full"
                 >
                   Sign Out
@@ -198,16 +198,16 @@ const Header = () => {
           <nav className="flex flex-col items-start p-4">
             {/* Mobile navigation links removed */}
             <div className="mt-4 flex flex-col space-y-4 w-full">
-              {status === "loading" ? (
+              {loading ? (
                  <div className="h-10 w-full bg-gray-200 dark:bg-gray-700 animate-pulse rounded-lg"></div> // Loading placeholder
-              ) : status === "authenticated" ? (
+              ) : user ? (
                 <>
                   <span className="text-gray-700 dark:text-gray-200 px-4 py-2">
-                    Hi, {session.user?.name || session.user?.email}
+                      Hi, {user.displayName || user.email}
                   </span>
                   <button
                     onClick={() => {
-                      signOut();
+                        logout();
                       setNavbarOpen(false); // Close menu on sign out
                     }}
                     className="bg-transparent border border-primary text-primary px-4 py-2 rounded-lg hover:bg-blue-600 hover:text-white"

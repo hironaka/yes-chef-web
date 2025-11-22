@@ -1,5 +1,6 @@
 "use client";
-import { signIn } from "next-auth/react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, Dispatch, SetStateAction } from "react";
@@ -23,30 +24,23 @@ const Signin: React.FC<SignInProps> = ({ setIsSignInOpen, setIsSignUpOpen }) => 
   });
   const [loading, setLoading] = useState(false);
 
-  const loginUser = (e: any) => {
+  const loginUser = async (e: any) => {
     e.preventDefault();
 
     setLoading(true);
-    signIn("credentials", { ...loginData, redirect: false })
-      .then((callback) => {
-        if (callback?.error) {
-          toast.error(callback?.error);
-          console.log(callback?.error);
-          setLoading(false);
-          return;
-        }
-
-        if (callback?.ok && !callback?.error) {
-          toast.success("Login successful");
-          setLoading(false);
-          router.push("/");
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err.message);
-        toast.error(err.message);
-      });
+    try {
+      await signInWithEmailAndPassword(auth, loginData.email, loginData.password);
+      toast.success("Login successful");
+      setLoading(false);
+      router.push("/");
+      if (setIsSignInOpen) {
+        setIsSignInOpen(false);
+      }
+    } catch (err: any) {
+      setLoading(false);
+      console.log(err.message);
+      toast.error(err.message);
+    }
   };
 
   return (

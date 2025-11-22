@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { PrismaClient } from '@prisma/client';
 import nodemailer from 'nodemailer';
+import { firebaseAdmin } from '@/lib/firebase-admin';
 
 const prisma = new PrismaClient();
 
@@ -81,6 +82,21 @@ export async function POST(req: NextRequest) {
         console.log(`Starting async deletion process for code: ${confirmationCode}`);
         try {
             // 6. Perform Deletion Asynchronously
+            // Try to delete from Firebase Auth
+            try {
+                const firebaseUser = await firebaseAdmin.auth().getUserByProviderUid('facebook.com', userId);
+                await firebaseAdmin.auth().deleteUser(firebaseUser.uid);
+                console.log(`Successfully deleted Firebase user: ${firebaseUser.uid}`);
+            } catch (firebaseError: any) {
+                if (firebaseError.code === 'auth/user-not-found') {
+                    console.log(`Firebase user not found for Facebook ASID: ${userId}`);
+                } else {
+                    console.error(`Failed to delete Firebase user for Facebook ASID ${userId}:`, firebaseError);
+                    // We might want to mark as failed if Firebase deletion fails, but let's continue to check Prisma
+                }
+            }
+
+            // Try to delete from Prisma (if exists)
             const account = await prisma.account.findUnique({
                 where: {
                     provider_providerAccountId: {
@@ -91,24 +107,24 @@ export async function POST(req: NextRequest) {
             });
 
             if (!account) {
-                console.log(`No account found for Facebook ASID: ${userId}. Updating status to not_found.`);
+                console.log(`No Prisma account found for Facebook ASID: ${userId}.`);
                 await prisma.dataDeletionRequest.update({
                     where: { confirmationCode: confirmationCode },
                     data: { status: 'not_found' },
                 });
             } else {
-                console.log(`Account found for user ID: ${account.userId}. Attempting user deletion.`);
+                console.log(`Prisma Account found for user ID: ${account.userId}. Attempting user deletion.`);
                 try {
                     await prisma.user.delete({
                         where: { id: account.userId },
                     });
-                    console.log(`Successfully deleted user: ${account.userId}. Updating status to success.`);
+                    console.log(`Successfully deleted Prisma user: ${account.userId}. Updating status to success.`);
                     await prisma.dataDeletionRequest.update({
                         where: { confirmationCode: confirmationCode },
                         data: { status: 'success' },
                     });
                 } catch (deletionError: any) {
-                    console.error(`Failed to delete user ${account.userId}:`, deletionError);
+                    console.error(`Failed to delete Prisma user ${account.userId}:`, deletionError);
                     await prisma.dataDeletionRequest.update({
                         where: { confirmationCode: confirmationCode },
                         data: {
@@ -133,7 +149,6 @@ export async function POST(req: NextRequest) {
                         message: `Async processing error: ${asyncError instanceof Error ? asyncError.message : String(asyncError)}`,
                      },
                 });
-                 // TODO: Optionally send email here too if the outer try fails
             } catch (updateError) {
                  console.error(`Failed to even update status to failed for code ${confirmationCode}:`, updateError);
             }

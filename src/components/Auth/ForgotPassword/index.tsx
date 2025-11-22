@@ -2,7 +2,8 @@
 import React from "react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import axios from "axios";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import Loader from "@/components/Common/Loader";
 import Link from "next/link";
 import Image from "next/image";
@@ -16,31 +17,19 @@ const ForgotPassword = () => {
 
     if (!email) {
       toast.error("Please enter your email address.");
-
       return;
     }
 
     setLoader(true);
 
     try {
-      const res = await axios.post("/api/forgot-password/reset", {
-        email: email.toLowerCase(),
-      });
-
-      if (res.status === 404) {
-        toast.error("User not found.");
-        return;
-      }
-
-      if (res.status === 200) {
-        toast.success(res.data);
-        setEmail("");
-      }
-
+      await sendPasswordResetEmail(auth, email);
+      toast.success("Password reset email sent!");
       setEmail("");
       setLoader(false);
     } catch (error: any) {
-      toast.error(error?.response.data);
+      console.error("Error sending password reset email:", error);
+      toast.error(error.message || "Failed to send reset email.");
       setLoader(false);
     }
   };

@@ -1,4 +1,5 @@
-"use client";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
@@ -16,44 +17,32 @@ const SignUp: React.FC<SignUpProps> = ({ setIsSignInOpen, setIsSignUpOpen }) => 
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     setLoading(true);
     const data = new FormData(e.currentTarget);
     const value = Object.fromEntries(data.entries());
-    const finalData = { ...value };
+    const { email, password, name } = value as { email: string; password: string; name: string };
 
-    fetch("/api/auth/register", { // Correct API endpoint
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(finalData),
-    })
-      .then(async (res) => { // Make async to await text() on error
-        if (!res.ok) {
-          // If response is not OK, parse error message from text body
-          const errorText = await res.text();
-          throw new Error(errorText || "Registration failed"); // Throw error to be caught below
-        }
-        return res.json(); // If OK, parse JSON body
-      })
-      .then((data) => {
-        toast.success("Successfully registered! Please sign in.");
-        setLoading(false);
-        router.push("/"); // Redirect to home or sign-in page after successful registration
-        if (setIsSignInOpen && setIsSignUpOpen) {
-          setIsSignInOpen(true);
-          setIsSignUpOpen(false);
-        }
-        // Consider closing the modal if this component is used within one
-      })
-      .catch((err) => {
-        console.error("Registration Fetch Error:", err);
-        toast.error(err.message || "An unexpected error occurred."); // Display specific API error or generic message
-        setLoading(false);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCredential.user, {
+        displayName: name,
       });
+
+      toast.success("Successfully registered!");
+      setLoading(false);
+      router.push("/");
+      if (setIsSignInOpen && setIsSignUpOpen) {
+        setIsSignInOpen(false); // Don't open sign in, just close sign up as they are already logged in
+        setIsSignUpOpen(false);
+      }
+    } catch (err: any) {
+      console.error("Registration Error:", err);
+      toast.error(err.message || "An unexpected error occurred.");
+      setLoading(false);
+    }
   };
 
   return (

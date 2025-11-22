@@ -1,12 +1,10 @@
-"use client";
-
 import { ThemeProvider } from "next-themes";
-import { SessionProvider } from "next-auth/react";
+import { AuthProvider } from "@/context/AuthContext";
 import { RecipeProvider } from "@/context/RecipeContext";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <SessionProvider>
+    <AuthProvider>
       <ThemeProvider
         attribute="class"
         enableSystem={true}
@@ -14,6 +12,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
       >
         <RecipeProvider>{children}</RecipeProvider>
       </ThemeProvider>
-    </SessionProvider>
+    </AuthProvider>
   );
 }

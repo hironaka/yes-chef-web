@@ -1,12 +1,36 @@
 import React from "react";
-import { signIn } from "next-auth/react";
+import { signInWithPopup, GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import toast from "react-hot-toast";
 
 const SocialSignUp = () => {
+  const handleGoogleSignUp = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      toast.success("Signed up with Google");
+    } catch (error: any) {
+      console.error("Google Sign Up Error:", error);
+      toast.error(error.message);
+    }
+  };
+
+  const handleFacebookSignUp = async () => {
+    try {
+      const provider = new FacebookAuthProvider();
+      await signInWithPopup(auth, provider);
+      toast.success("Signed up with Facebook");
+    } catch (error: any) {
+      console.error("Facebook Sign Up Error:", error);
+      toast.error(error.message);
+    }
+  };
+
   return (
     <>
       <div className="flex gap-4">
         <button
-          onClick={() => signIn("google")}
+          onClick={handleGoogleSignUp}
           className="flex w-full items-center justify-center gap-2.5 rounded-lg p-3.5 bg-primary hover:bg-primary/40 text-white"
         >
           Sign Up
@@ -49,7 +73,7 @@ const SocialSignUp = () => {
         </button>
 
         <button
-          onClick={() => signIn("facebook")}
+          onClick={handleFacebookSignUp}
           className="flex w-full items-center justify-center gap-2.5 rounded-lg p-3.5 bg-primary hover:bg-primary/40 text-white"
         >
           Sign Up

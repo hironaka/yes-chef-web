@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { verifyPasswordResetCode, confirmPasswordReset } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Loader from "@/components/Common/Loader";
@@ -23,24 +24,18 @@ const ResetPassword = ({ token }: { token: string }) => {
   useEffect(() => {
     const verifyToken = async () => {
       try {
-        const res = await axios.post(`/api/forgot-password/verify-token`, {
-          token,
-        });
-
-        if (res.status === 200) {
-          setUser({
-            email: res.data.email,
-          });
-        }
+        const email = await verifyPasswordResetCode(auth, token);
+        setUser({ email });
       } catch (error: any) {
-        toast.error(error?.response?.data);
+        console.error("Error verifying reset code:", error);
+        toast.error(error.message || "Invalid or expired token.");
         router.push("/forgot-password");
       }
     };
 
     verifyToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [token]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setData({
@@ -55,24 +50,19 @@ const ResetPassword = ({ token }: { token: string }) => {
 
     if (data.newPassword === "") {
       toast.error("Please enter your password.");
+      setLoader(false);
       return;
     }
 
     try {
-      const res = await axios.post(`/api/forgot-password/update`, {
-        email: user?.email,
-        password: data.newPassword,
-      });
-
-      if (res.status === 200) {
-        toast.success(res.data);
-        setData({ newPassword: "", ReNewPassword: "" });
-        router.push("/");
-      }
-
+      await confirmPasswordReset(auth, token, data.newPassword);
+      toast.success("Password reset successfully!");
+      setData({ newPassword: "", ReNewPassword: "" });
+      router.push("/signin"); // Redirect to signin instead of home
       setLoader(false);
     } catch (error: any) {
-      toast.error(error.response.data);
+      console.error("Error resetting password:", error);
+      toast.error(error.message || "Failed to reset password.");
       setLoader(false);
     }
   };

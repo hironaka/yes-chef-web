@@ -9,8 +9,10 @@ import Loader from '@/components/Common/Loader'; // Assuming you have a Loader c
 function ResetPasswordContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
+  const oobCode = searchParams.get('oobCode');
+  const code = oobCode || token;
 
-  if (!token) {
+  if (!code) {
     // Handle the case where the token is missing from the URL
     // You might want to redirect or show a specific message
     return (
@@ -20,7 +22,7 @@ function ResetPasswordContent() {
     );
   }
 
-  return <ResetPasswordComponent token={token} />;
+  return <ResetPasswordComponent token={code} />;
 }
 
 // Main page component using Suspense
