@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "prisma generate && next build"
+    "postinstall": "next build"
   },
   "dependencies": {
     "@google-cloud/vertexai": "^1.9.3",
