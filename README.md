@@ -7,9 +7,8 @@ This project is a web interface for an AI-powered recipe assistant called "Yes C
 *   **Framework**: [Next.js](https://nextjs.org/) (App Router)
 *   **Language**: [TypeScript](https://www.typescriptlang.org/)
 *   **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-*   **Database**: [PostgreSQL](https://www.postgresql.org/)
-*   **ORM**: [Prisma](https://www.prisma.io/)
-*   **Authentication**: [NextAuth.js](https://next-auth.js.org/)
+*   **Database**: None (Stateless / Firebase Auth)
+*   **Authentication**: [Firebase Authentication](https://firebase.google.com/docs/auth)
 *   **AI**:
     *   [OpenAI API](https://platform.openai.com/docs/guides/realtime)
     *   [Google Cloud Vertex AI](https://cloud.google.com/vertex-ai)
@@ -30,8 +29,7 @@ This is a Next.js 15 (App Router) application that provides a web interface for 
 - **Chrome Extension Dependency:** Requires companion Chrome Extension for recipe data
 - **OpenAI Realtime API:** Powers voice/text AI interaction via WebRTC
 - **Google Cloud Vertex AI:** Used for recipe extraction from URLs
-- **NextAuth.js:** Authentication with Google, Facebook, and credentials providers
-- **Prisma + PostgreSQL:** Database layer with user management and data deletion tracking
+- **Firebase Authentication:** Handles user sign-in/sign-up (Google, Facebook, Email/Password)
 
 ### Core Architecture
 
@@ -47,10 +45,9 @@ This is a Next.js 15 (App Router) application that provides a web interface for 
 4. Real-time voice/text communication with AI sous-chef
 5. Timer functionality integrated for cooking instructions
 
-**Authentication & Database:**
-- Multi-provider auth (Google, Facebook, email/password)
-- Prisma schema includes NextAuth tables plus custom DataDeletionRequest model
-- JWT session strategy for scalability
+**Authentication:**
+- Firebase Authentication for secure user management
+- AuthContext for global session state
 
 **Key Integration Points:**
 - `/api/recipe/extract` - Vertex AI recipe extraction endpoint
@@ -65,7 +62,6 @@ The project is organized as follows:
 *   `src/app`: Contains the main application routes, including `api`, `contact`, `recipe`, and user authentication pages.
 *   `src/components`: Reusable React components used throughout the application.
 *   `src/lib`: Utility functions and actions.
-*   `prisma`: Contains the database schema (`schema.prisma`) and migrations.
 *   `public`: Static assets such as images and audio files.
 
 ## Getting Started
@@ -74,7 +70,6 @@ The project is organized as follows:
 
 *   [Node.js](https://nodejs.org/)
 *   [npm](https://www.npmjs.com/) (usually comes with Node.js)
-*   [PostgreSQL](https://www.postgresql.org/)
 *   The companion Chrome Extension installed in your browser.
 
 ### Installation
@@ -96,28 +91,16 @@ The project is organized as follows:
         cp .env.example .env.local
         ```
     *   Open `.env.local` and configure the following variables:
-        *   `DATABASE_URL`: Your PostgreSQL connection string.
         *   `OPENAI_API_KEY`: Your OpenAI API key.
         *   `GCP_PROJECT`: Your Google Cloud project ID.
         *   `GCP_LOCATION`: Your Google Cloud location.
         *   `GOOGLE_APPLICATION_CREDENTIALS`: Path to your Google Cloud service account key file.
-        *   `NEXTAUTH_SECRET`: A secret key for NextAuth.js.
-        *   `NEXTAUTH_URL`: The URL of your application.
-
-4.  **Set up the database:**
-    *   Run the following command to create the database schema:
-        ```bash
-        npx prisma db push
-        ```
-
-### Database Operations
-
-```bash
-npx prisma generate    # Generate Prisma client
-npx prisma db push     # Push schema changes to database
-npx prisma migrate dev # Create and apply migrations
-npx prisma studio      # Open database browser
-```
+        *   `NEXT_PUBLIC_FIREBASE_API_KEY`: Firebase API Key
+        *   `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`: Firebase Auth Domain
+        *   `NEXT_PUBLIC_FIREBASE_PROJECT_ID`: Firebase Project ID
+        *   `NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET`: Firebase Storage Bucket
+        *   `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID`: Firebase Messaging Sender ID
+        *   `NEXT_PUBLIC_FIREBASE_APP_ID`: Firebase App ID
 
 ### Running the Development Server
 
