@@ -15,8 +15,15 @@ export async function generateToken() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "gpt-realtime",
-          voice: "verse",
+          session: {
+            type: "realtime",
+            model: "gpt-realtime",
+            audio: {
+              output: {
+                voice: "verse",
+              },
+            },
+          },
         }),
       },
     );

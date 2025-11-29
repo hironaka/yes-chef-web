@@ -27,7 +27,8 @@ export default function App() {
   const startSession = useCallback(async () => {
     // Get an ephemeral key from the Fastify server
     const tokenResponse = await generateToken();
-    const EPHEMERAL_KEY = tokenResponse.data.client_secret.value;
+    console.log(tokenResponse);
+    const EPHEMERAL_KEY = tokenResponse.data.value;
 
     // Create a peer connection
     const pc = new RTCPeerConnection();
@@ -314,7 +315,7 @@ export default function App() {
   const systemInstruction = `
   You are a helpful sous-chef working as an assistant to a chef.
 
-  Start by speaking 'yes chef' and wait for a question. After the initial greeting, do not say 'yes chef' ever again.
+  Start by speaking 'yes chef!' only once and wait for a question. After the initial greeting, do not say 'yes chef' ever again.
   
   Only give instructions when asked. Be as incremental and step by step as possible.
 
@@ -333,8 +334,8 @@ export default function App() {
     return {
       type: "session.update",
       session: {
+        "type": "realtime",
         "instructions": systemInstruction,
-        "temperature": 0.6,
         "tools": [
           {
             type: "function",
