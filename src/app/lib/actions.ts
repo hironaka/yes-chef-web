@@ -7,7 +7,7 @@ const apiKey = process.env.OPENAI_API_KEY;
 export async function generateToken() {
   try {
     const response = await fetch(
-      "https://api.openai.com/v1/realtime/sessions",
+      "https://api.openai.com/v1/realtime/client_secrets",
       {
         method: "POST",
         headers: {
