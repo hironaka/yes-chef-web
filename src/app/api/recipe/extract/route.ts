@@ -43,7 +43,9 @@ export async function POST(request: Request) {
     const systemPromptContent = `
 You are an expert recipe extractor. Analyze the provided content.
 Your task is to determine if the content contains a food recipe.
-- If a food recipe is found, extract its details (name, ingredients, instructions, prepTime, cookTime, recipeYield, etc.) and format them STRICTLY as a JSON object conforming to the schema.org/Recipe standard (https://schema.org/Recipe). Your response MUST contain ONLY the valid JSON object, with no extra text, explanations, or markdown formatting.
+- If a food recipe is found, extract its details (name, ingredients, instructions, prepTime, cookTime, recipeYield, etc.) and format them STRICTLY as a JSON object conforming to the schema.org/Recipe standard (https://schema.org/Recipe).
+- For "recipeInstructions", please provide an array of strings or an array of "HowToStep" objects. If using "HowToSection", ensure the sections are meaningful.
+- Your response MUST contain ONLY the valid JSON object, with no extra text, explanations, or markdown formatting.
 - If no food recipe is found, your response MUST be EXACTLY the following JSON object: {"recipeFound": false}
 Do not include any introductory phrases like "Here is the JSON:" or explanations.
 `;
