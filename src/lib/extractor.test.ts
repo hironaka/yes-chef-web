@@ -202,7 +202,7 @@ async function runTests() {
 
     // New image-based test
     try {
-        const imagePath = path.join(process.cwd(), 'src/lib/__fixtures__/test_recipe.png');
+        const imagePath = path.join(process.cwd(), 'src/lib/__fixtures__/pancake_recipe.png');
         if (fs.existsSync(imagePath)) {
             const imageBuffer = fs.readFileSync(imagePath);
             const base64Image = imageBuffer.toString('base64');
@@ -212,12 +212,33 @@ async function runTests() {
                     mimeType: "image/png"
                 }
             };
-            allPassed = (await testRecipe("Test Recipe Image", imagePart, true)) && allPassed;
+            allPassed = (await testRecipe("Pancake Recipe Image", imagePart, true)) && allPassed;
         } else {
             console.warn("WARN: Skipping image test (fixture not found)");
         }
     } catch (e) {
         console.error("ERROR preparing image test:", e);
+        allPassed = false;
+    }
+
+    // New image-based test for green eggs
+    try {
+        const imagePath = path.join(process.cwd(), 'src/lib/__fixtures__/green_eggs_recipe.jpg');
+        if (fs.existsSync(imagePath)) {
+            const imageBuffer = fs.readFileSync(imagePath);
+            const base64Image = imageBuffer.toString('base64');
+            const imagePart = {
+                inlineData: {
+                    data: base64Image,
+                    mimeType: "image/jpeg"
+                }
+            };
+            allPassed = (await testRecipe("Green Eggs Recipe Image", imagePart, true)) && allPassed;
+        } else {
+            console.warn("WARN: Skipping green eggs image test (fixture not found)");
+        }
+    } catch (e) {
+        console.error("ERROR preparing green eggs image test:", e);
         allPassed = false;
     }
     

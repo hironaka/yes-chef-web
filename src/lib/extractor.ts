@@ -2,7 +2,7 @@ import { GoogleGenAI } from "@google/genai";
 
 const project = process.env.GCP_PROJECT || '';
 const location = process.env.GCP_LOCATION || 'us-central1';
-const modelName = 'gemini-2.5-flash-lite';
+const modelName = 'gemini-2.5-flash';
 
 const ai = new GoogleGenAI({
   vertexai: true,
