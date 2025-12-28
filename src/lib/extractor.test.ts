@@ -133,11 +133,20 @@ Using large spoon, skim any excess fat from surface of stew. Stir in pearl onion
 Increase heat to high, stir in softened gelatin mixture and peas; simmer until gelatin is fully dissolved and stew is thickened, about 3 minutes. Season with salt and pepper to taste; serve.
 `;
 
-async function testRecipe(name: string, content: string) {
+
+import * as fs from 'fs';
+import * as path from 'path';
+
+async function testRecipe(name: string, content: string | any, isImage = false) {
   console.log(`\nTesting extraction for: ${name}...`);
 
   try {
-    const recipe = await extractRecipe(content);
+    let recipe;
+    if (isImage) {
+        recipe = await extractRecipe(undefined, content);
+    } else {
+        recipe = await extractRecipe(content);
+    }
 
     console.log("--- Extracted ---");
     console.log(`Name: ${recipe.name}`);
@@ -185,9 +194,32 @@ async function testRecipe(name: string, content: string) {
 
 async function runTests() {
     let allPassed = true;
+    
+    // Existing text-based tests
     allPassed = (await testRecipe("Milk Street Cookies", MILK_STREET_SAMPLE)) && allPassed;
     allPassed = (await testRecipe("Narrative Beef Stew", BEEF_STEW_SAMPLE)) && allPassed;
     allPassed = (await testRecipe("ATK Beef Stew Full", ATK_BEEF_STEW_SAMPLE)) && allPassed;
+
+    // New image-based test
+    try {
+        const imagePath = path.join(process.cwd(), 'src/lib/__fixtures__/test_recipe.png');
+        if (fs.existsSync(imagePath)) {
+            const imageBuffer = fs.readFileSync(imagePath);
+            const base64Image = imageBuffer.toString('base64');
+            const imagePart = {
+                inlineData: {
+                    data: base64Image,
+                    mimeType: "image/png"
+                }
+            };
+            allPassed = (await testRecipe("Test Recipe Image", imagePart, true)) && allPassed;
+        } else {
+            console.warn("WARN: Skipping image test (fixture not found)");
+        }
+    } catch (e) {
+        console.error("ERROR preparing image test:", e);
+        allPassed = false;
+    }
     
     if (!allPassed) {
         process.exit(1);
